@@ -17,6 +17,13 @@
   </properties>
 
   <dependencies>
+	  <dependency>
+		  <groupId>gravity</groupId>
+		  <artifactId>security-annotations</artifactId>
+		  <version>1.0</version>
+		  <systemPath>${project.basedir}/.gravity/org.gravity.security.annotations.jar</systemPath>
+		  <scope>system</scope>
+	  </dependency>
     <dependency>
       <groupId>io.swagger.core.v3</groupId>
       <artifactId>swagger-jaxrs2</artifactId>

@@ -5,12 +5,14 @@
 
 package org.whispersystems.textsecuregcm.configuration.secrets;
 
+import org.gravity.security.annotations.requirements.*;
 import com.google.common.collect.ImmutableList;
 import java.util.Collection;
 import java.util.List;
 import javax.validation.constraints.NotEmpty;
 import org.hibernate.validator.internal.constraintvalidators.bv.notempty.NotEmptyValidatorForCollection;
 
+@Critical(secrecy = "Secret.Secret(T):void", integrity = "Secret.Secret(T):void")
 public class SecretStringList extends Secret<List<String>> {
 
   @SuppressWarnings("rawtypes")
@@ -20,6 +22,7 @@ public class SecretStringList extends Secret<List<String>> {
     }
   }
 
+  @Secrecy
   public SecretStringList(final List<String> value) {
     super(ImmutableList.copyOf(value));
   }

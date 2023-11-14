@@ -6,11 +6,13 @@
 package org.whispersystems.textsecuregcm.configuration.secrets;
 
 import static java.util.Objects.requireNonNull;
+import org.gravity.security.annotations.requirements.*;
 
 import java.lang.annotation.Annotation;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+@Critical(integrity = "Secret.value:T", secrecy = "Secret.value:T")
 public abstract class BaseSecretValidator<A extends Annotation, T, S extends Secret<? extends T>> implements ConstraintValidator<A, S> {
 
   private final ConstraintValidator<A, T> validator;
@@ -25,6 +27,7 @@ public abstract class BaseSecretValidator<A extends Annotation, T, S extends Sec
     validator.initialize(constraintAnnotation);
   }
 
+  @Secrecy
   @Override
   public boolean isValid(final S value, final ConstraintValidatorContext context) {
     return validator.isValid(value.value(), context);

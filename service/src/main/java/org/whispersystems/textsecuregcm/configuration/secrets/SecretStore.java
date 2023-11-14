@@ -5,6 +5,7 @@
 
 package org.whispersystems.textsecuregcm.configuration.secrets;
 
+import org.gravity.security.annotations.requirements.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.annotations.VisibleForTesting;
 import java.io.File;
@@ -15,11 +16,14 @@ import java.util.List;
 import java.util.Map;
 import org.whispersystems.textsecuregcm.util.SystemMapper;
 
+@Critical(secrecy = "Secret.value():T", integrity = "Secret.value():T")
 public class SecretStore {
 
+	@Secrecy
   private final Map<String, Secret<?>> secrets;
 
 
+	@Secrecy
   public static SecretStore fromYamlFileSecretsBundle(final String filename) {
     try {
       @SuppressWarnings("unchecked")
@@ -32,29 +36,35 @@ public class SecretStore {
     }
   }
 
+  @Secrecy
   public SecretStore(final Map<String, Secret<?>> secrets) {
     this.secrets = Map.copyOf(secrets);
   }
 
+  @Secrecy
   public SecretString secretString(final String reference) {
     return fromStore(reference, SecretString.class);
   }
 
+  @Secrecy
   public SecretBytes secretBytesFromBase64String(final String reference) {
     final SecretString secret = fromStore(reference, SecretString.class);
     return new SecretBytes(decodeBase64(secret.value()));
   }
 
+  @Secrecy
   public SecretStringList secretStringList(final String reference) {
     return fromStore(reference, SecretStringList.class);
   }
 
+  @Secrecy
   public SecretBytesList secretBytesListFromBase64Strings(final String reference) {
     final List<String> secrets = secretStringList(reference).value();
     final List<byte[]> byteSecrets = secrets.stream().map(SecretStore::decodeBase64).toList();
     return new SecretBytesList(byteSecrets);
   }
 
+  @Secrecy
   private <T extends Secret<?>> T fromStore(final String name, final Class<T> expected) {
     final Secret<?> secret = secrets.get(name);
     if (secret == null) {
@@ -67,6 +77,7 @@ public class SecretStore {
     return expected.cast(secret);
   }
 
+  @Secrecy
   @VisibleForTesting
   public static SecretStore fromYamlStringSecretsBundle(final String secretsBundleYaml) {
     try {
@@ -78,6 +89,7 @@ public class SecretStore {
     }
   }
 
+  @Secrecy
   private static SecretStore fromSecretsBundle(final Map<String, Object> secretsBundle) {
     final Map<String, Secret<?>> store = new HashMap<>();
     secretsBundle.forEach((k, v) -> {

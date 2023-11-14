@@ -4,16 +4,20 @@
  */
 
 package org.whispersystems.textsecuregcm.configuration.secrets;
+import org.gravity.security.annotations.requirements.*;
 
+@Critical(integrity = "Secret.value:T", secrecy = "Secret.value:T")
 public class Secret<T> {
 
+	@Secrecy
   private final T value;
 
-
+	@Secrecy
   public Secret(final T value) {
     this.value = value;
   }
 
+	@Secrecy
   public T value() {
     return value;
   }

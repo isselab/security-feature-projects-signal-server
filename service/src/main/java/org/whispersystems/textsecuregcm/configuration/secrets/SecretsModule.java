@@ -5,6 +5,7 @@
 
 package org.whispersystems.textsecuregcm.configuration.secrets;
 
+import org.gravity.security.annotations.requirements.*;
 import static java.util.Objects.requireNonNull;
 
 import com.fasterxml.jackson.core.JacksonException;
@@ -22,6 +23,7 @@ public class SecretsModule extends SimpleModule {
 
   public static final String PREFIX = "secret://";
 
+  @Secrecy
   private final AtomicReference<SecretStore> secretStoreHolder = new AtomicReference<>(null);
 
 
@@ -32,6 +34,7 @@ public class SecretsModule extends SimpleModule {
     addDeserializer(SecretBytesList.class, createDeserializer(SecretStore::secretBytesListFromBase64Strings));
   }
 
+  @Secrecy
   public void setSecretStore(final SecretStore secretStore) {
     this.secretStoreHolder.set(requireNonNull(secretStore));
   }

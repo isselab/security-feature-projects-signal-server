@@ -5,6 +5,7 @@
 
 package org.whispersystems.textsecuregcm.metrics;
 
+import org.gravity.security.annotations.requirements.*;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.PatternLayout;
 import ch.qos.logback.classic.spi.ILoggingEvent;
@@ -27,10 +28,13 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import net.logstash.logback.appender.LogstashTcpSocketAppender;
 import net.logstash.logback.encoder.LogstashEncoder;
+
+import org.gravity.security.annotations.requirements.Critical;
 import org.whispersystems.textsecuregcm.WhisperServerVersion;
 import org.whispersystems.textsecuregcm.configuration.secrets.SecretString;
 import org.whispersystems.textsecuregcm.util.HostnameUtil;
 
+@Critical(secrecy = "Secret.value():T", integrity = "Secret.value():T")
 @JsonTypeName("logstashtcpsocket")
 public class LogstashTcpSocketAppenderFactory extends AbstractAppenderFactory<ILoggingEvent> {
 
@@ -42,6 +46,7 @@ public class LogstashTcpSocketAppenderFactory extends AbstractAppenderFactory<IL
 
   @JsonProperty
   @NotNull
+  @Secrecy
   private SecretString apiKey;
 
   @JsonProperty
@@ -59,6 +64,7 @@ public class LogstashTcpSocketAppenderFactory extends AbstractAppenderFactory<IL
   }
 
   @JsonProperty
+  @Secrecy
   public SecretString getApiKey() {
     return apiKey;
   }
@@ -70,6 +76,7 @@ public class LogstashTcpSocketAppenderFactory extends AbstractAppenderFactory<IL
   }
 
   @Override
+  @Secrecy
   public Appender<ILoggingEvent> build(
       final LoggerContext context,
       final String applicationName,

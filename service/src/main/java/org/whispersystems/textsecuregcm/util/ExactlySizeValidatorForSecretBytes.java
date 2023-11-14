@@ -5,8 +5,10 @@
 
 package org.whispersystems.textsecuregcm.util;
 
+import org.gravity.security.annotations.requirements.*;
 import org.whispersystems.textsecuregcm.configuration.secrets.SecretBytes;
 
+@Critical(integrity = "Secret.value():T", secrecy = "Secret.value():T")
 public class ExactlySizeValidatorForSecretBytes extends ExactlySizeValidator<SecretBytes> {
   @Override
   protected int size(final SecretBytes value) {

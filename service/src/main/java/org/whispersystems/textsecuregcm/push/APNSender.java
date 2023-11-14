@@ -4,6 +4,7 @@
  */
 package org.whispersystems.textsecuregcm.push;
 
+import org.gravity.security.annotations.requirements.*;
 import static org.whispersystems.textsecuregcm.metrics.MetricsUtil.name;
 
 import com.eatthepath.pushy.apns.ApnsClient;
@@ -27,10 +28,12 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import org.whispersystems.textsecuregcm.configuration.ApnConfiguration;
 
+@Critical(integrity = "Secret.value():T", secrecy = "Secret.value():T")
 public class APNSender implements Managed, PushNotificationSender {
 
   private final ExecutorService executor;
   private final String bundleId;
+  @Secrecy
   private final ApnsClient apnsClient;
 
   @VisibleForTesting
@@ -57,6 +60,7 @@ public class APNSender implements Managed, PushNotificationSender {
 
   private static final Timer SEND_NOTIFICATION_TIMER = Metrics.timer(name(APNSender.class, "sendNotification"));
 
+  @Secrecy
   public APNSender(ExecutorService executor, ApnConfiguration configuration)
       throws IOException, NoSuchAlgorithmException, InvalidKeyException
   {
@@ -70,6 +74,7 @@ public class APNSender implements Managed, PushNotificationSender {
         .build();
   }
 
+  @Secrecy
   @VisibleForTesting
   public APNSender(ExecutorService executor, ApnsClient apnsClient, String bundleId) {
     this.executor = executor;

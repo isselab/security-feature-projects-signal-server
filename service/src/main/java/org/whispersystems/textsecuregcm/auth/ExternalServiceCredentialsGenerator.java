@@ -5,6 +5,7 @@
 
 package org.whispersystems.textsecuregcm.auth;
 
+import org.gravity.security.annotations.requirements.*;
 import static java.util.Objects.requireNonNull;
 import static org.whispersystems.textsecuregcm.util.HmacUtils.hmac256ToHexString;
 import static org.whispersystems.textsecuregcm.util.HmacUtils.hmac256TruncatedToHexString;
@@ -20,14 +21,17 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.whispersystems.textsecuregcm.configuration.secrets.SecretBytes;
 
+@Critical(integrity = "Secret.value():T", secrecy = "Secret.value():T")
 public class ExternalServiceCredentialsGenerator {
 
   private static final String DELIMITER = ":";
 
   private static final int TRUNCATED_SIGNATURE_LENGTH = 10;
 
+  @Secrecy
   private final byte[] key;
 
+  @Secrecy
   private final byte[] userDerivationKey;
 
   private final boolean prependUsername;
@@ -42,16 +46,18 @@ public class ExternalServiceCredentialsGenerator {
 
   private final int derivedUsernameTruncateLength;
 
-
+  @Secrecy
   public static ExternalServiceCredentialsGenerator.Builder builder(final SecretBytes key) {
     return builder(key.value());
   }
 
+  @Secrecy
   @VisibleForTesting
   public static ExternalServiceCredentialsGenerator.Builder builder(final byte[] key) {
     return new Builder(key);
   }
 
+  @Secrecy
   private ExternalServiceCredentialsGenerator(
       final byte[] key,
       final byte[] userDerivationKey,
@@ -248,10 +254,12 @@ public class ExternalServiceCredentialsGenerator {
       this.key = requireNonNull(key);
     }
 
+    @Secrecy
     public Builder withUserDerivationKey(final SecretBytes userDerivationKey) {
       return withUserDerivationKey(userDerivationKey.value());
     }
 
+    @Secrecy
     public Builder withUserDerivationKey(final byte[] userDerivationKey) {
       Validate.isTrue(requireNonNull(userDerivationKey).length > 0, "userDerivationKey must not be empty");
       this.userDerivationKey = userDerivationKey;
@@ -285,6 +293,7 @@ public class ExternalServiceCredentialsGenerator {
       return this;
     }
 
+    @Secrecy
     public ExternalServiceCredentialsGenerator build() {
       return new ExternalServiceCredentialsGenerator(
           key, userDerivationKey, prependUsername, truncateSignature, derivedUsernameTruncateLength, usernameTimestampPrefix, usernameTimestampTruncator, clock);

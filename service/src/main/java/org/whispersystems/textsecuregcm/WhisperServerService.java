@@ -4,6 +4,7 @@
  */
 package org.whispersystems.textsecuregcm;
 
+import org.gravity.security.annotations.requirements.*;
 import static com.codahale.metrics.MetricRegistry.name;
 import static java.util.Objects.requireNonNull;
 
@@ -245,10 +246,12 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.S3Client;
 
+@Critical(integrity = {"Secret.value():T", "SecretStore.fromYamlFileSecretsBundle(String):SecretStore"}, secrecy = {"Sectret.value():T", "SecretStore.fromYamlFileSecretsBundle(String):SecretStore"})
 public class WhisperServerService extends Application<WhisperServerConfiguration> {
 
   private static final Logger log = LoggerFactory.getLogger(WhisperServerService.class);
 
+  @Secrecy
   public static final String SECRETS_BUNDLE_FILE_NAME_PROPERTY = "secrets.bundle.filename";
 
   public static final software.amazon.awssdk.auth.credentials.AwsCredentialsProvider AWSSDK_CREDENTIALS_PROVIDER =
@@ -288,6 +291,7 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
     return "whisper-server";
   }
 
+  @Secrecy
   @Override
   public void run(WhisperServerConfiguration config, Environment environment) throws Exception {
     final Clock clock = Clock.systemUTC();

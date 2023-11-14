@@ -3,8 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
+// TODO: handles API requests, when are things propagated to outside?
 package org.whispersystems.textsecuregcm.controllers;
 
+import org.gravity.security.annotations.requirements.*;
 import io.dropwizard.auth.Auth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -37,6 +39,7 @@ import org.whispersystems.textsecuregcm.storage.AccountsManager;
 
 @Path("/v2/backup")
 @Tag(name = "Secure Value Recovery")
+@Critical(secrecy = "Secret.value():T", integrity = "Secret.value():T")
 public class SecureValueRecovery2Controller {
 
   private static final long MAX_AGE_SECONDS = TimeUnit.DAYS.toSeconds(30);
@@ -45,6 +48,7 @@ public class SecureValueRecovery2Controller {
     return credentialsGenerator(cfg, Clock.systemUTC());
   }
 
+  @Secrecy
   @TestOnly
   public static ExternalServiceCredentialsGenerator credentialsGenerator(final SecureValueRecovery2Configuration cfg, final Clock clock) {
     return ExternalServiceCredentialsGenerator
@@ -56,6 +60,7 @@ public class SecureValueRecovery2Controller {
         .build();
   }
 
+  @Secrecy
   private final ExternalServiceCredentialsGenerator backupServiceCredentialGenerator;
   private final AccountsManager accountsManager;
 

@@ -6,12 +6,16 @@ package org.whispersystems.textsecuregcm.auth;
 
 import java.util.Base64;
 import org.apache.commons.lang3.StringUtils;
+import org.gravity.security.annotations.requirements.Critical;
+import org.gravity.security.annotations.requirements.Secrecy;
 import org.whispersystems.textsecuregcm.util.Pair;
 
+@Critical(secrecy = "BasicAuthorizationHeader.password:String")
 public class BasicAuthorizationHeader {
 
   private final String username;
   private final byte deviceId;
+  @Secrecy
   private final String password;
 
   private BasicAuthorizationHeader(final String username, final byte deviceId, final String password) {
@@ -88,6 +92,7 @@ public class BasicAuthorizationHeader {
     return deviceId;
   }
 
+  @Secrecy
   public String getPassword() {
     return password;
   }

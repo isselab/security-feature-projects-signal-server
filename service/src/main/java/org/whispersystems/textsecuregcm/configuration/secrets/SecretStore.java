@@ -13,10 +13,13 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.gravity.security.annotations.requirements.Secrecy;
 import org.whispersystems.textsecuregcm.util.SystemMapper;
 
 public class SecretStore {
 
+  @Secrecy
   private final Map<String, Secret<?>> secrets;
 
 

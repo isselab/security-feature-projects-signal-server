@@ -29,6 +29,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.gravity.security.annotations.requirements.Secrecy;
 import org.signal.libsignal.protocol.ServiceId;
 import org.signal.libsignal.zkgroup.GenericServerSecretParams;
 import org.signal.libsignal.zkgroup.auth.AuthCredentialWithPniResponse;
@@ -47,6 +49,7 @@ public class CertificateController {
 
   private final CertificateGenerator certificateGenerator;
   private final ServerZkAuthOperations serverZkAuthOperations;
+  @Secrecy
   private final GenericServerSecretParams genericServerSecretParams;
   private final Clock clock;
 

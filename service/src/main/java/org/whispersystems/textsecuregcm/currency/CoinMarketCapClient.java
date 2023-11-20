@@ -15,13 +15,18 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Map;
+
+import org.gravity.security.annotations.requirements.Critical;
+import org.gravity.security.annotations.requirements.Secrecy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.whispersystems.textsecuregcm.util.SystemMapper;
 
+@Critical(secrecy = "CoinMarketCapClient.apiKey:String")
 public class CoinMarketCapClient {
 
   private final HttpClient httpClient;
+  @Secrecy
   private final String apiKey;
   private final Map<String, Integer> currencyIdsBySymbol;
 
@@ -39,6 +44,7 @@ public class CoinMarketCapClient {
     this.currencyIdsBySymbol = currencyIdsBySymbol;
   }
 
+  @Secrecy
   public BigDecimal getSpotPrice(final String currency, final String base) throws IOException {
     if (!currencyIdsBySymbol.containsKey(currency)) {
       throw new IllegalArgumentException("No currency ID found for " + currency);

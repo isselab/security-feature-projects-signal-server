@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+
+import org.gravity.security.annotations.requirements.Secrecy;
 import org.signal.libsignal.protocol.InvalidKeyException;
 import org.signal.libsignal.protocol.ecc.ECPublicKey;
 import org.signal.libsignal.zkgroup.GenericServerSecretParams;
@@ -50,6 +52,7 @@ public class BackupManager {
   private static final String SUCCESS_TAG_NAME = "success";
   private static final String FAILURE_REASON_TAG_NAME = "reason";
 
+  @Secrecy
   private final GenericServerSecretParams serverSecretParams;
   private final TusBackupCredentialGenerator tusBackupCredentialGenerator;
   private final DynamoDbAsyncClient dynamoClient;

@@ -7,10 +7,15 @@ package org.whispersystems.textsecuregcm.configuration;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.NotNull;
+
+import org.gravity.security.annotations.requirements.Critical;
+import org.gravity.security.annotations.requirements.Secrecy;
 import org.whispersystems.textsecuregcm.configuration.secrets.SecretString;
 
+@Critical(secrecy = "HCaptchaConfiguration.apiKey:org.whispersystems.textsecuregcm.configuration.secrets.SecretString")
 public class HCaptchaConfiguration {
 
+  @Secrecy
   @JsonProperty
   @NotNull
   SecretString apiKey;
@@ -24,6 +29,7 @@ public class HCaptchaConfiguration {
   RetryConfiguration retry = new RetryConfiguration();
 
 
+  @Secrecy
   public SecretString getApiKey() {
     return apiKey;
   }

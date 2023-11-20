@@ -5,6 +5,8 @@
 
 package org.whispersystems.textsecuregcm.auth;
 
+import org.gravity.security.annotations.requirements.Critical;
+import org.gravity.security.annotations.requirements.Secrecy;
 import org.whispersystems.textsecuregcm.configuration.TurnUriConfiguration;
 import org.whispersystems.textsecuregcm.configuration.dynamic.DynamicConfiguration;
 import org.whispersystems.textsecuregcm.configuration.dynamic.DynamicTurnConfiguration;
@@ -25,10 +27,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Critical(secrecy = "TurnTokenGenerator.turnSecret:byte[]")
 public class TurnTokenGenerator {
 
   private final DynamicConfigurationManager<DynamicConfiguration> dynamicConfigurationManager;
 
+  @Secrecy
   private final byte[] turnSecret;
 
   private static final String ALGORITHM = "HmacSHA1";
@@ -40,6 +44,7 @@ public class TurnTokenGenerator {
     this.turnSecret = turnSecret;
   }
 
+  @Secrecy
   public TurnToken generate(final UUID aci) {
     try {
       final List<String> urls = urls(aci);

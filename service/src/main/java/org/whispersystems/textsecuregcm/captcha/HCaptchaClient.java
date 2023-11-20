@@ -27,6 +27,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import javax.ws.rs.core.Response;
+
+import org.gravity.security.annotations.requirements.Critical;
+import org.gravity.security.annotations.requirements.Secrecy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.whispersystems.textsecuregcm.configuration.CircuitBreakerConfiguration;
@@ -38,12 +41,14 @@ import org.whispersystems.textsecuregcm.storage.DynamicConfigurationManager;
 import org.whispersystems.textsecuregcm.util.ExceptionUtils;
 import org.whispersystems.textsecuregcm.util.SystemMapper;
 
+@Critical(secrecy = "HCaptchaClient.apiKey:String")
 public class HCaptchaClient implements CaptchaClient {
 
   private static final Logger logger = LoggerFactory.getLogger(HCaptchaClient.class);
   private static final String PREFIX = "signal-hcaptcha";
   private static final String ASSESSMENT_REASON_COUNTER_NAME = name(HCaptchaClient.class, "assessmentReason");
   private static final String INVALID_REASON_COUNTER_NAME = name(HCaptchaClient.class, "invalidReason");
+  @Secrecy
   private final String apiKey;
   private final FaultTolerantHttpClient client;
   private final DynamicConfigurationManager<DynamicConfiguration> dynamicConfigurationManager;

@@ -11,11 +11,15 @@ import java.util.Optional;
 import java.util.OptionalInt;
 import javax.annotation.Nullable;
 import javax.validation.constraints.Size;
+
+import org.gravity.security.annotations.requirements.Critical;
+import org.gravity.security.annotations.requirements.Secrecy;
 import org.whispersystems.textsecuregcm.auth.UnidentifiedAccessUtil;
 import org.whispersystems.textsecuregcm.storage.Device.DeviceCapabilities;
 import org.whispersystems.textsecuregcm.util.ByteArrayAdapter;
 import org.whispersystems.textsecuregcm.util.ExactlySize;
 
+@Critical(secrecy = "AccountAttributes.recoveryPassword:byte[]")
 public class AccountAttributes {
 
   @JsonProperty
@@ -50,6 +54,7 @@ public class AccountAttributes {
   @JsonProperty
   @Nullable
   @JsonDeserialize(using = ByteArrayAdapter.Deserializing.class)
+  @Secrecy
   private byte[] recoveryPassword = null;
 
   public AccountAttributes() {
@@ -107,6 +112,7 @@ public class AccountAttributes {
     return discoverableByPhoneNumber;
   }
 
+  @Secrecy
   public Optional<byte[]> recoveryPassword() {
     return Optional.ofNullable(recoveryPassword);
   }

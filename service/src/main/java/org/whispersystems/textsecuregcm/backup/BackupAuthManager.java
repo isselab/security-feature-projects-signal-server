@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
+
+import org.gravity.security.annotations.requirements.Critical;
+import org.gravity.security.annotations.requirements.Secrecy;
 import org.signal.libsignal.zkgroup.GenericServerSecretParams;
 import org.signal.libsignal.zkgroup.InvalidInputException;
 import org.signal.libsignal.zkgroup.backups.BackupAuthCredentialRequest;
@@ -37,6 +40,7 @@ import org.whispersystems.textsecuregcm.util.Util;
  * can use {@link #getBackupAuthCredentials} to retrieve credentials that can subsequently be used to make anonymously
  * authenticated requests against their backup-id.
  */
+@Critical(secrecy = "BackupAuthManager.serverSecretParams:org.signal.libsignal.zkgroup.GenericServerSecretParams")
 public class BackupAuthManager {
 
   private static final Duration MAX_REDEMPTION_DURATION = Duration.ofDays(7);
@@ -44,6 +48,7 @@ public class BackupAuthManager {
   final static String BACKUP_MEDIA_EXPERIMENT_NAME = "backupMedia";
 
   private final DynamicConfigurationManager<DynamicConfiguration> dynamicConfigurationManager;
+  @Secrecy
   private final GenericServerSecretParams serverSecretParams;
   private final Clock clock;
   private final RateLimiters rateLimiters;
@@ -104,6 +109,7 @@ public class BackupAuthManager {
    * @param redemptionEnd   The day (must be truncated to a day boundary) the last credential should be valid
    * @return Credentials and the day on which they may be redeemed
    */
+  @Secrecy
   public CompletableFuture<List<Credential>> getBackupAuthCredentials(
       final Account account,
       final Instant redemptionStart,

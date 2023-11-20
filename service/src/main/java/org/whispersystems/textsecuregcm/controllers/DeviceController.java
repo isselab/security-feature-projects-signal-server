@@ -45,6 +45,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.glassfish.jersey.server.ContainerRequest;
+import org.gravity.security.annotations.requirements.Integrity;
+import org.gravity.security.annotations.requirements.Secrecy;
 import org.whispersystems.textsecuregcm.auth.AuthEnablementRefreshRequirementProvider;
 import org.whispersystems.textsecuregcm.auth.AuthenticatedAccount;
 import org.whispersystems.textsecuregcm.auth.BasicAuthorizationHeader;
@@ -76,6 +78,8 @@ public class DeviceController {
 
   static final int MAX_DEVICES = 6;
 
+  @Secrecy
+  @Integrity
   private final Key verificationTokenKey;
   private final AccountsManager       accounts;
   private final MessagesManager       messages;

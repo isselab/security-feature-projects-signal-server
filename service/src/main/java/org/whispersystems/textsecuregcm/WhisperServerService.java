@@ -252,6 +252,7 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
   private static final Logger log = LoggerFactory.getLogger(WhisperServerService.class);
 
   @Secrecy
+  @Integrity
   public static final String SECRETS_BUNDLE_FILE_NAME_PROPERTY = "secrets.bundle.filename";
 
   public static final software.amazon.awssdk.auth.credentials.AwsCredentialsProvider AWSSDK_CREDENTIALS_PROVIDER =
@@ -261,12 +262,14 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
 
   @Override
   public void initialize(final Bootstrap<WhisperServerConfiguration> bootstrap) {
-    // `SecretStore` needs to be initialized before Dropwizard reads the main application config file.
+    // `SecretStore` needs to be initialized before Dropwizard reads the main application config file. 
+	//&begin[Internal-Secret-Distribution]
     final String secretsBundleFileName = requireNonNull(
         System.getProperty(SECRETS_BUNDLE_FILE_NAME_PROPERTY),
         "Application requires property [%s] to be provided".formatted(SECRETS_BUNDLE_FILE_NAME_PROPERTY));
     final SecretStore secretStore = SecretStore.fromYamlFileSecretsBundle(secretsBundleFileName);
-    SecretsModule.INSTANCE.setSecretStore(secretStore);
+    SecretsModule.INSTANCE.setSecretStore(secretStore); 
+	//&end[Internal-Secret-Distribution]
 
     // Initializing SystemMapper here because parsing of the main application config happens before `run()` method is called.
     SystemMapper.configureMapper(bootstrap.getObjectMapper());
@@ -345,13 +348,15 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
         config.getDynamoDbTables().getPhoneNumberIdentifiers().getTableName());
     Profiles profiles = new Profiles(dynamoDbClient, dynamoDbAsyncClient,
         config.getDynamoDbTables().getProfiles().getTableName());
-    KeysManager keys = new KeysManager(
+	//&begin[Internal-Secret-Distribution]
+    KeysManager keys = new KeysManager( 
             dynamoDbAsyncClient,
         config.getDynamoDbTables().getEcKeys().getTableName(),
         config.getDynamoDbTables().getKemKeys().getTableName(),
         config.getDynamoDbTables().getEcSignedPreKeys().getTableName(),
         config.getDynamoDbTables().getKemLastResortKeys().getTableName(),
         dynamicConfigurationManager);
+	//&end[Internal-Secret-Distribution]
     MessagesDynamoDb messagesDynamoDb = new MessagesDynamoDb(dynamoDbClient, dynamoDbAsyncClient,
         config.getDynamoDbTables().getMessages().getTableName(),
         config.getDynamoDbTables().getMessages().getExpiration(),
@@ -463,19 +468,21 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
         .build();
     ScheduledExecutorService subscriptionProcessorRetryExecutor = environment.lifecycle()
         .scheduledExecutorService(name(getClass(), "subscriptionProcessorRetry-%d")).threads(1).build();
-
+	
+	//&begin[Logging]
     final AdminEventLogger adminEventLogger = new GoogleCloudAdminEventLogger(
         LoggingOptions.newBuilder().setProjectId(config.getAdminEventLoggingConfiguration().projectId())
-            .setCredentials(GoogleCredentials.fromStream(new ByteArrayInputStream(
+            .setCredentials(GoogleCredentials.fromStream(new ByteArrayInputStream( //&line[Internal-Secret-Distribution]
                 config.getAdminEventLoggingConfiguration().credentials().getBytes(StandardCharsets.UTF_8))))
             .build().getService(),
         config.getAdminEventLoggingConfiguration().projectId(),
         config.getAdminEventLoggingConfiguration().logName());
+	//&begin[Logging]
 
-    StripeManager stripeManager = new StripeManager(config.getStripe().apiKey().value(), subscriptionProcessorExecutor,
+    StripeManager stripeManager = new StripeManager(config.getStripe().apiKey().value(), subscriptionProcessorExecutor, //&line[Internal-Secret-Distribution]
         config.getStripe().idempotencyKeyGenerator().value(), config.getStripe().boostDescription(), config.getStripe().supportedCurrenciesByPaymentMethod());
     BraintreeManager braintreeManager = new BraintreeManager(config.getBraintree().merchantId(),
-        config.getBraintree().publicKey(), config.getBraintree().privateKey().value(),
+        config.getBraintree().publicKey(), config.getBraintree().privateKey().value(), //&line[Internal-Secret-Distribution]
         config.getBraintree().environment(),
         config.getBraintree().supportedCurrenciesByPaymentMethod(), config.getBraintree().merchantAccounts(),
         config.getBraintree().graphqlUrl(), config.getBraintree().circuitBreaker(), subscriptionProcessorExecutor,
@@ -497,7 +504,7 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
     ExperimentEnrollmentManager experimentEnrollmentManager = new ExperimentEnrollmentManager(
         dynamicConfigurationManager);
     RegistrationRecoveryPasswordsManager registrationRecoveryPasswordsManager = new RegistrationRecoveryPasswordsManager(
-        registrationRecoveryPasswords);
+        registrationRecoveryPasswords);//&line[Internal-Secret-Distribution]
     UsernameHashZkProofVerifier usernameHashZkProofVerifier = new UsernameHashZkProofVerifier();
 
     RegistrationServiceClient registrationServiceClient = new RegistrationServiceClient(
@@ -528,13 +535,13 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
     AccountLockManager accountLockManager = new AccountLockManager(dynamoDbClient,
         config.getDynamoDbTables().getDeletedAccountsLock().getTableName());
     AccountsManager accountsManager = new AccountsManager(accounts, phoneNumberIdentifiers, cacheCluster,
-        accountLockManager, keys, messagesManager, profilesManager,
+        accountLockManager, keys, messagesManager, profilesManager, //&line[Internal-Secret-Distribution]
         secureStorageClient, secureValueRecovery2Client,
         clientPresenceManager,
         experimentEnrollmentManager, registrationRecoveryPasswordsManager, accountLockExecutor, clock);
     RemoteConfigsManager remoteConfigsManager = new RemoteConfigsManager(remoteConfigs);
     APNSender apnSender = new APNSender(apnSenderExecutor, config.getApnConfiguration());
-    FcmSender fcmSender = new FcmSender(fcmSenderExecutor, config.getFcmConfiguration().credentials().value());
+    FcmSender fcmSender = new FcmSender(fcmSenderExecutor, config.getFcmConfiguration().credentials().value()); //&line[Internal-Secret-Distribution]
     ApnPushNotificationScheduler apnPushNotificationScheduler = new ApnPushNotificationScheduler(pushSchedulerCluster,
         apnSender, accountsManager, 0);
     PushNotificationManager pushNotificationManager = new PushNotificationManager(accountsManager, apnSender, fcmSender,
@@ -574,7 +581,7 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
         pushLatencyManager);
     final ReceiptSender receiptSender = new ReceiptSender(accountsManager, messageSender, receiptSenderExecutor);
     final TurnTokenGenerator turnTokenGenerator = new TurnTokenGenerator(dynamicConfigurationManager,
-        config.getTurnSecretConfiguration().secret().value());
+        config.getTurnSecretConfiguration().secret().value());//&line[Internal-Secret-Distribution]
 
     final CardinalityEstimator messageByteLimitCardinalityEstimator = new CardinalityEstimator(
         rateLimitersCluster,
@@ -586,7 +593,7 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
         config.getRecaptchaConfiguration().credentialConfigurationJson(),
         dynamicConfigurationManager);
     HCaptchaClient hCaptchaClient = new HCaptchaClient(
-        config.getHCaptchaConfiguration().getApiKey().value(),
+        config.getHCaptchaConfiguration().getApiKey().value(),//&line[Internal-Secret-Distribution]
         hcaptchaRetryExecutor,
         config.getHCaptchaConfiguration().getCircuitBreaker(),
         config.getHCaptchaConfiguration().getRetry(),
@@ -604,8 +611,8 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
     ChangeNumberManager changeNumberManager = new ChangeNumberManager(messageSender, accountsManager);
 
     HttpClient currencyClient = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).connectTimeout(Duration.ofSeconds(10)).build();
-    FixerClient fixerClient = new FixerClient(currencyClient, config.getPaymentsServiceConfiguration().fixerApiKey().value());
-    CoinMarketCapClient coinMarketCapClient = new CoinMarketCapClient(currencyClient, config.getPaymentsServiceConfiguration().coinMarketCapApiKey().value(), config.getPaymentsServiceConfiguration().coinMarketCapCurrencyIds());
+    FixerClient fixerClient = new FixerClient(currencyClient, config.getPaymentsServiceConfiguration().fixerApiKey().value());//&line[Internal-Secret-Distribution]
+    CoinMarketCapClient coinMarketCapClient = new CoinMarketCapClient(currencyClient, config.getPaymentsServiceConfiguration().coinMarketCapApiKey().value(), config.getPaymentsServiceConfiguration().coinMarketCapCurrencyIds());//&line[Internal-Secret-Distribution]
     CurrencyConversionManager currencyManager = new CurrencyConversionManager(fixerClient, coinMarketCapClient,
         cacheCluster, config.getPaymentsServiceConfiguration().paymentCurrencies(), recurringJobExecutor, Clock.systemUTC());
 
@@ -623,8 +630,8 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
 
     StaticCredentialsProvider cdnCredentialsProvider = StaticCredentialsProvider
         .create(AwsBasicCredentials.create(
-            config.getCdnConfiguration().accessKey().value(),
-            config.getCdnConfiguration().accessSecret().value()));
+            config.getCdnConfiguration().accessKey().value(),//&line[Internal-Secret-Distribution]
+            config.getCdnConfiguration().accessSecret().value()));//&line[Internal-Secret-Distribution]
     S3Client cdnS3Client = S3Client.builder()
         .credentialsProvider(cdnCredentialsProvider)
         .region(Region.of(config.getCdnConfiguration().region()))
@@ -639,16 +646,16 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
         config.getGcpAttachmentsConfiguration().email(),
         config.getGcpAttachmentsConfiguration().maxSizeInBytes(),
         config.getGcpAttachmentsConfiguration().pathPrefix(),
-        config.getGcpAttachmentsConfiguration().rsaSigningKey().value());
+        config.getGcpAttachmentsConfiguration().rsaSigningKey().value());//&line[Internal-Secret-Distribution]
 
     PostPolicyGenerator profileCdnPolicyGenerator = new PostPolicyGenerator(config.getCdnConfiguration().region(),
-        config.getCdnConfiguration().bucket(), config.getCdnConfiguration().accessKey().value());
-    PolicySigner profileCdnPolicySigner = new PolicySigner(config.getCdnConfiguration().accessSecret().value(),
+        config.getCdnConfiguration().bucket(), config.getCdnConfiguration().accessKey().value());//&line[Internal-Secret-Distribution]
+    PolicySigner profileCdnPolicySigner = new PolicySigner(config.getCdnConfiguration().accessSecret().value(),//&line[Internal-Secret-Distribution]
         config.getCdnConfiguration().region());
 
     ServerSecretParams zkSecretParams = new ServerSecretParams(config.getZkConfig().serverSecret().value());
-    GenericServerSecretParams callingGenericZkSecretParams = new GenericServerSecretParams(config.getCallingZkConfig().serverSecret().value());
-    GenericServerSecretParams backupsGenericZkSecretParams = new GenericServerSecretParams(config.getBackupsZkConfig().serverSecret().value());
+    GenericServerSecretParams callingGenericZkSecretParams = new GenericServerSecretParams(config.getCallingZkConfig().serverSecret().value());//&line[Internal-Secret-Distribution]
+    GenericServerSecretParams backupsGenericZkSecretParams = new GenericServerSecretParams(config.getBackupsZkConfig().serverSecret().value());//&line[Internal-Secret-Distribution]
     ServerZkProfileOperations zkProfileOperations = new ServerZkProfileOperations(zkSecretParams);
     ServerZkAuthOperations zkAuthOperations = new ServerZkAuthOperations(zkSecretParams);
     ServerZkReceiptOperations zkReceiptOperations = new ServerZkReceiptOperations(zkSecretParams);
@@ -780,14 +787,14 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
         new AccountControllerV2(accountsManager, changeNumberManager, phoneVerificationTokenManager,
             registrationLockVerificationManager, rateLimiters),
         new ArtController(rateLimiters, artCredentialsGenerator),
-        new AttachmentControllerV2(rateLimiters, config.getAwsAttachmentsConfiguration().accessKey().value(), config.getAwsAttachmentsConfiguration().accessSecret().value(), config.getAwsAttachmentsConfiguration().region(), config.getAwsAttachmentsConfiguration().bucket()),
+        new AttachmentControllerV2(rateLimiters, config.getAwsAttachmentsConfiguration().accessKey().value(), config.getAwsAttachmentsConfiguration().accessSecret().value(), config.getAwsAttachmentsConfiguration().region(), config.getAwsAttachmentsConfiguration().bucket()), //&line[Internal-Secret-Distribution]
         new AttachmentControllerV3(rateLimiters, gcsAttachmentGenerator),
         new AttachmentControllerV4(rateLimiters, gcsAttachmentGenerator, new TusAttachmentGenerator(config.getTus()), experimentEnrollmentManager),
         new ArchiveController(backupAuthManager, backupManager),
         new CallLinkController(rateLimiters, callingGenericZkSecretParams),
-        new CertificateController(new CertificateGenerator(config.getDeliveryCertificate().certificate().value(), config.getDeliveryCertificate().ecPrivateKey(), config.getDeliveryCertificate().expiresDays()), zkAuthOperations, callingGenericZkSecretParams, clock),
+        new CertificateController(new CertificateGenerator(config.getDeliveryCertificate().certificate().value(), config.getDeliveryCertificate().ecPrivateKey(), config.getDeliveryCertificate().expiresDays()), zkAuthOperations, callingGenericZkSecretParams, clock),//&line[Internal-Secret-Distribution]
         new ChallengeController(rateLimitChallengeManager),
-        new DeviceController(config.getLinkDeviceSecretConfiguration().secret().value(), accountsManager, messagesManager, keys, rateLimiters,
+        new DeviceController(config.getLinkDeviceSecretConfiguration().secret().value(), accountsManager, messagesManager, keys, rateLimiters,//&line[Internal-Secret-Distribution]
             rateLimitersCluster, config.getMaxDevices(), clock),
         new DirectoryV2Controller(directoryV2CredentialsGenerator),
         new DonationController(clock, zkReceiptOperations, redeemedReceiptsManager, accountsManager, config.getBadges(),
@@ -811,8 +818,8 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
             config.getRemoteConfigConfiguration().globalConfig()),
         new SecureStorageController(storageCredentialsGenerator),
         new SecureValueRecovery2Controller(svr2CredentialsGenerator, accountsManager),
-        new StickerController(rateLimiters, config.getCdnConfiguration().accessKey().value(),
-            config.getCdnConfiguration().accessSecret().value(), config.getCdnConfiguration().region(),
+        new StickerController(rateLimiters, config.getCdnConfiguration().accessKey().value(),//&line[Internal-Secret-Distribution]
+            config.getCdnConfiguration().accessSecret().value(), config.getCdnConfiguration().region(),//&line[Internal-Secret-Distribution]
             config.getCdnConfiguration().bucket()),
         new VerificationController(registrationServiceClient, new VerificationSessionManager(verificationSessions),
             pushNotificationManager, registrationCaptchaManager, registrationRecoveryPasswordsManager, rateLimiters,

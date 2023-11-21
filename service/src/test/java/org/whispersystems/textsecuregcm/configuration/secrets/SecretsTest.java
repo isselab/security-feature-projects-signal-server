@@ -20,10 +20,12 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.constraints.NotEmpty;
 import org.apache.commons.lang3.RandomUtils;
+import org.gravity.security.annotations.requirements.Critical;
 import org.junit.jupiter.api.Test;
 import org.whispersystems.textsecuregcm.util.ExactlySize;
 import org.whispersystems.textsecuregcm.util.SystemMapper;
 
+@Critical(secrecy = "*")
 public class SecretsTest {
 
   private static final String SECRET_REF = "secret_string";

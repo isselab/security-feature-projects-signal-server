@@ -18,6 +18,7 @@ import java.util.UUID;
 import java.util.function.Function;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
+import org.gravity.security.annotations.requirements.Secrecy;
 import org.whispersystems.textsecuregcm.configuration.secrets.SecretBytes;
 
 public class ExternalServiceCredentialsGenerator {
@@ -229,6 +230,7 @@ public class ExternalServiceCredentialsGenerator {
 
     private final byte[] key;
 
+    @Secrecy
     private byte[] userDerivationKey = new byte[0];
 
     private boolean prependUsername = true;

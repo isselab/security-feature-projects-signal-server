@@ -25,6 +25,7 @@ import java.util.stream.Stream;
 import org.apache.commons.lang3.RandomUtils;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.ThrowableAssert;
+import org.gravity.security.annotations.requirements.Critical;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -43,6 +44,7 @@ import org.whispersystems.textsecuregcm.storage.AccountsManager;
 import org.whispersystems.textsecuregcm.tests.util.ExperimentHelper;
 import org.whispersystems.textsecuregcm.util.TestClock;
 
+@Critical(secrecy = "*")
 public class BackupAuthManagerTest {
   private final UUID aci = UUID.randomUUID();
   private final byte[] backupKey = RandomUtils.nextBytes(32);

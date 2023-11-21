@@ -1,6 +1,8 @@
 package org.whispersystems.textsecuregcm.auth;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+
+import org.gravity.security.annotations.requirements.Critical;
 import org.junit.jupiter.api.Test;
 import org.whispersystems.textsecuregcm.configuration.dynamic.DynamicConfiguration;
 import org.whispersystems.textsecuregcm.storage.DynamicConfigurationManager;
@@ -15,6 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@Critical(secrecy = "*")
 public class TurnTokenGeneratorTest {
 
   @Test

@@ -16,6 +16,8 @@ import static org.whispersystems.textsecuregcm.grpc.GrpcTestUtils.assertRateLimi
 
 import java.time.Duration;
 import java.util.List;
+
+import org.gravity.security.annotations.requirements.Critical;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.signal.chat.calling.CallingGrpc;
@@ -27,6 +29,7 @@ import org.whispersystems.textsecuregcm.limits.RateLimiter;
 import org.whispersystems.textsecuregcm.limits.RateLimiters;
 import org.whispersystems.textsecuregcm.util.MockUtils;
 
+@Critical(secrecy = "*")
 class CallingGrpcServiceTest extends SimpleBaseGrpcTest<CallingGrpcService, CallingGrpc.CallingBlockingStub> {
 
   @Mock

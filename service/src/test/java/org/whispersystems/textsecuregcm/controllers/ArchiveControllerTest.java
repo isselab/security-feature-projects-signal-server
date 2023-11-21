@@ -36,6 +36,7 @@ import javax.ws.rs.core.Response;
 import org.apache.commons.lang3.RandomUtils;
 import org.glassfish.jersey.server.ServerProperties;
 import org.glassfish.jersey.test.grizzly.GrizzlyWebTestContainerFactory;
+import org.gravity.security.annotations.requirements.Critical;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -61,6 +62,7 @@ import org.whispersystems.textsecuregcm.tests.util.AuthHelper;
 import org.whispersystems.textsecuregcm.util.SystemMapper;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
+@Critical(secrecy = "BackupAuthManager.getBackupAuthCredentials(Account,Instant,Instant):CompletableFuture")
 public class ArchiveControllerTest {
 
   private static final BackupAuthManager backupAuthManager = mock(BackupAuthManager.class);

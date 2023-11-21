@@ -13,6 +13,8 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
+
+import org.gravity.security.annotations.requirements.Critical;
 import org.signal.libsignal.zkgroup.GenericServerSecretParams;
 import org.signal.libsignal.zkgroup.VerificationFailedException;
 import org.signal.libsignal.zkgroup.backups.BackupAuthCredentialPresentation;
@@ -21,6 +23,7 @@ import org.signal.libsignal.zkgroup.backups.BackupAuthCredentialRequestContext;
 import org.whispersystems.textsecuregcm.storage.Account;
 import org.whispersystems.textsecuregcm.tests.util.ExperimentHelper;
 
+@Critical(secrecy = "*")
 public class BackupAuthTestUtil {
 
   final GenericServerSecretParams params = GenericServerSecretParams.generate();

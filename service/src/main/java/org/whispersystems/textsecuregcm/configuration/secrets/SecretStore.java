@@ -39,25 +39,30 @@ public class SecretStore {
     this.secrets = Map.copyOf(secrets);
   }
 
+  @Secrecy
   public SecretString secretString(final String reference) {
     return fromStore(reference, SecretString.class);
   }
 
+  @Secrecy
   public SecretBytes secretBytesFromBase64String(final String reference) {
     final SecretString secret = fromStore(reference, SecretString.class);
     return new SecretBytes(decodeBase64(secret.value()));
   }
 
+  @Secrecy
   public SecretStringList secretStringList(final String reference) {
     return fromStore(reference, SecretStringList.class);
   }
 
+  @Secrecy
   public SecretBytesList secretBytesListFromBase64Strings(final String reference) {
     final List<String> secrets = secretStringList(reference).value();
     final List<byte[]> byteSecrets = secrets.stream().map(SecretStore::decodeBase64).toList();
     return new SecretBytesList(byteSecrets);
   }
 
+  @Secrecy
   private <T extends Secret<?>> T fromStore(final String name, final Class<T> expected) {
     final Secret<?> secret = secrets.get(name);
     if (secret == null) {

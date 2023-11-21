@@ -23,7 +23,6 @@ import org.signal.libsignal.zkgroup.backups.BackupAuthCredentialRequestContext;
 import org.whispersystems.textsecuregcm.storage.Account;
 import org.whispersystems.textsecuregcm.tests.util.ExperimentHelper;
 
-@Critical(secrecy = "*")
 public class BackupAuthTestUtil {
 
   final GenericServerSecretParams params = GenericServerSecretParams.generate();

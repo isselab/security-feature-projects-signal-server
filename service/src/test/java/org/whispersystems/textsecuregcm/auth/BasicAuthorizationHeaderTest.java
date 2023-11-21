@@ -17,7 +17,6 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@Critical(secrecy = "*")
 class BasicAuthorizationHeaderTest {
 
   @Test

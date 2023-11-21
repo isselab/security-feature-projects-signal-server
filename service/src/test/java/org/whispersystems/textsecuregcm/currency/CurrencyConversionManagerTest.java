@@ -26,7 +26,6 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import org.whispersystems.textsecuregcm.entities.CurrencyConversionEntityList;
 import org.whispersystems.textsecuregcm.redis.RedisClusterExtension;
 
-@Critical(secrecy = "*")
 class CurrencyConversionManagerTest {
 
   @RegisterExtension

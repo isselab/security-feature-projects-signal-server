@@ -9,6 +9,7 @@ import org.whispersystems.textsecuregcm.configuration.secrets.SecretBytes;
 
 public class ExactlySizeValidatorForSecretBytes extends ExactlySizeValidator<SecretBytes> {
   @Override
+  // TODO: is the size of a secret also a secret? e.g. knowing the length of a password might allow for better password cracking capabilities...
   protected int size(final SecretBytes value) {
     return value == null ? 0 : value.value().length;
   }

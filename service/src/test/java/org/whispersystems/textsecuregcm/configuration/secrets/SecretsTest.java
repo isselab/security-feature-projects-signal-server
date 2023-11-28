@@ -25,6 +25,7 @@ import org.junit.jupiter.api.Test;
 import org.whispersystems.textsecuregcm.util.ExactlySize;
 import org.whispersystems.textsecuregcm.util.SystemMapper;
 
+@Critical(secrecy = {"SecretStore.secretStringList(String):SecretStringList", "SecretStore.secretString(String):SecretString", "Secret.value():T"})
 public class SecretsTest {
 
   private static final String SECRET_REF = "secret_string";

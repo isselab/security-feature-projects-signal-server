@@ -29,6 +29,7 @@ import org.whispersystems.textsecuregcm.limits.RateLimiter;
 import org.whispersystems.textsecuregcm.limits.RateLimiters;
 import org.whispersystems.textsecuregcm.util.MockUtils;
 
+@Critical(secrecy = {"TurnTokenGenerator.generate(UUID):TurnToken"})
 class CallingGrpcServiceTest extends SimpleBaseGrpcTest<CallingGrpcService, CallingGrpc.CallingBlockingStub> {
 
   @Mock

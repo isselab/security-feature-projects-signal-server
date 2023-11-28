@@ -5,6 +5,7 @@
 
 package org.whispersystems.textsecuregcm.grpc;
 
+import org.gravity.security.annotations.requirements.Critical;
 import org.signal.chat.calling.GetTurnCredentialsRequest;
 import org.signal.chat.calling.GetTurnCredentialsResponse;
 import org.signal.chat.calling.ReactorCallingGrpc;
@@ -14,6 +15,7 @@ import org.whispersystems.textsecuregcm.auth.grpc.AuthenticationUtil;
 import org.whispersystems.textsecuregcm.limits.RateLimiters;
 import reactor.core.publisher.Mono;
 
+@Critical(secrecy = {"TurnTokenGenerator.generate(UUID):TurnToken"})
 public class CallingGrpcService extends ReactorCallingGrpc.CallingImplBase {
 
   private final TurnTokenGenerator turnTokenGenerator;

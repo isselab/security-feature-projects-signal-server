@@ -555,7 +555,7 @@ public class BraintreeManager implements SubscriptionProcessorManager {
 
   public CompletableFuture<Optional<Transaction>> getLatestTransactionForSubscription(String subscriptionId) {
     return getSubscription(subscriptionId)
-            .thenApply(BraintreeManager::getSubscription)
+            .thenApply(b -> getSubscription(b))
             .thenApply(this::getLatestTransactionForSubscription);
   }
 

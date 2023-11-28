@@ -293,26 +293,30 @@ public class MessagesCache extends RedisClusterPubSubAdapter<String, String> imp
             List.of(String.valueOf(PAGE_SIZE).getBytes(StandardCharsets.UTF_8),
                 String.valueOf(messageId).getBytes(StandardCharsets.UTF_8)))
         .map(result -> {
-          logger.trace("Processing page: {}", messageId);
-
-          @SuppressWarnings("unchecked")
-          List<byte[]> queueItems = (List<byte[]>) result;
-
-          if (queueItems.isEmpty()) {
-            return new Pair<>(Collections.emptyList(), null);
-          }
-
-          if (queueItems.size() % 2 != 0) {
-            logger.error("\"Get messages\" operation returned a list with a non-even number of elements.");
-            return new Pair<>(Collections.emptyList(), null);
-          }
-
-          final long lastMessageId = Long.parseLong(
-              new String(queueItems.get(queueItems.size() - 1), StandardCharsets.UTF_8));
-
-          return new Pair<>(queueItems, lastMessageId);
+          return mapsomething(messageId, result);
         });
   }
+
+private Pair<List<byte[]>, Long> mapsomething(long messageId, Object result) {
+	logger.trace("Processing page: {}", messageId);
+
+	  @SuppressWarnings("unchecked")
+	  List<byte[]> queueItems = (List<byte[]>) result;
+
+	  if (queueItems.isEmpty()) {
+	    return new Pair<>(Collections.emptyList(), null);
+	  }
+
+	  if (queueItems.size() % 2 != 0) {
+	    logger.error("\"Get messages\" operation returned a list with a non-even number of elements.");
+	    return new Pair<>(Collections.emptyList(), null);
+	  }
+
+	  final long lastMessageId = Long.parseLong(
+	      new String(queueItems.get(queueItems.size() - 1), StandardCharsets.UTF_8));
+
+	  return new Pair<>(queueItems, lastMessageId);
+}
 
   @VisibleForTesting
   List<MessageProtos.Envelope> getMessagesToPersist(final UUID accountUuid, final byte destinationDevice,

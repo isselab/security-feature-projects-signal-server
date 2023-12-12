@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.gravity.security.annotations.requirements.*;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import java.util.Base64;
 import java.util.Collections;
@@ -24,6 +25,25 @@ import org.junit.jupiter.api.Test;
 import org.whispersystems.textsecuregcm.util.ExactlySize;
 import org.whispersystems.textsecuregcm.util.SystemMapper;
 
+@Critical( //just allow everything because its a test class
+		secrecy = {"SecretStringList.SecretStringList(List):void", 
+				"SecretString.SecretString(String):void", 
+				"SecretStore.secretStringList(String):SecretStringList", 
+				"SecretStore.secretString(String):SecretString", 
+				"SecretStore.SecretStore(Map):void", 
+				"SecretStore.fromYamlStringSecretsBundle(String):SecretStore", 
+				"SecretBytesList.SecretBytesList(List):void", 
+				"SecretBytes.SecretBytes(byte[]):void", 
+				"Secret.value():T" },
+		integrity = {"SecretStringList.SecretStringList(List):void", 
+				"SecretString.SecretString(String):void", 
+				"SecretStore.secretStringList(String):SecretStringList", 
+				"SecretStore.secretString(String):SecretString", 
+				"SecretStore.SecretStore(Map):void", 
+				"SecretStore.fromYamlStringSecretsBundle(String):SecretStore", 
+				"SecretBytesList.SecretBytesList(List):void", 
+				"SecretBytes.SecretBytes(byte[]):void", 
+				"Secret.value():T" })
 public class SecretsTest {
 
   private static final String SECRET_REF = "secret_string";

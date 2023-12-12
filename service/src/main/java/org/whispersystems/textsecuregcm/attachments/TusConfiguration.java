@@ -5,11 +5,13 @@
 
 package org.whispersystems.textsecuregcm.attachments;
 
+import org.gravity.security.annotations.requirements.*;
 import org.whispersystems.textsecuregcm.configuration.secrets.SecretBytes;
 import org.whispersystems.textsecuregcm.util.ExactlySize;
 import javax.validation.constraints.NotEmpty;
 
+
 public record TusConfiguration(
-  @ExactlySize(32) SecretBytes userAuthenticationTokenSharedSecret,
+  @Secrecy @ExactlySize(32) SecretBytes userAuthenticationTokenSharedSecret,
   @NotEmpty String uploadUri
 ){}

@@ -5,6 +5,7 @@
 
 package org.whispersystems.textsecuregcm.backup;
 
+import org.gravity.security.annotations.requirements.*;
 import org.apache.http.HttpHeaders;
 import org.whispersystems.textsecuregcm.attachments.TusConfiguration;
 import org.whispersystems.textsecuregcm.auth.ExternalServiceCredentials;
@@ -16,6 +17,8 @@ import java.time.Clock;
 import java.util.Base64;
 import java.util.Map;
 
+
+@Critical(secrecy = {"TusBackupCredentialGenerator.credentialsGenerator:org.whispersystems.textsecuregcm.auth.ExternalServiceCredentialsGenerator", "TusBackupCredentialGenerator.credentialsGenerator(Clock,TusConfiguration):org.whispersystems.textsecuregcm.auth.ExternalServiceCredentialsGenerator",  "ExternalServiceCredentialsGenerator.builder(SecretBytes):Builder", "TusBackupCredentialGenerator.credentialsGenerator(Clock,TusConfiguration):ExternalServiceCredentialsGenerator", "Builder.build():ExternalServiceCredentialsGenerator"})
 public class TusBackupCredentialGenerator {
 
   private static final int BACKUP_CDN = 3;
@@ -32,18 +35,21 @@ public class TusBackupCredentialGenerator {
   private static final String READ_ENTITY_PREFIX = String.format("%s%s%s/", READ_PERMISSION, PERMISSION_SEPARATOR,
       CDN_PATH);
 
-  private final ExternalServiceCredentialsGenerator credentialsGenerator;
+  @Secrecy
+  private final ExternalServiceCredentialsGenerator credentialsGenerator; 
   private final String tusUri;
+
 
   public TusBackupCredentialGenerator(final TusConfiguration cfg) {
     this.tusUri = cfg.uploadUri();
     this.credentialsGenerator = credentialsGenerator(Clock.systemUTC(), cfg);
   }
-
+  
+  @Secrecy
   private static ExternalServiceCredentialsGenerator credentialsGenerator(final Clock clock,
       final TusConfiguration cfg) {
     return ExternalServiceCredentialsGenerator
-        .builder(cfg.userAuthenticationTokenSharedSecret())
+        .builder(cfg.userAuthenticationTokenSharedSecret()) //&line[Internal-Secret-Distribution]
         .prependUsername(false)
         .withClock(clock)
         .build();

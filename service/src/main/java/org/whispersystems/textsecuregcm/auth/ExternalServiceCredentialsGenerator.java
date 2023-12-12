@@ -21,7 +21,24 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.whispersystems.textsecuregcm.configuration.secrets.SecretBytes;
 
-@Critical(integrity = "Secret.value():T", secrecy = "Secret.value():T")
+/** Regarding the key and user derivation key:
+ * 	both keys are private variables, and only used in either the creation of another instance
+ * 	of a ExternalServiceCredentialsGenerator or are fed into the hmac functions of 
+ * 	the hmac utils in org.whispersystems.textsecuregcm.util.HmacUtils.java.
+ * 	So the keys should be safe in this class.
+ */
+@Critical(
+		integrity = {"Secret.value():T",
+				"ExternalServiceCredentialsGenerator.builder(byte[]):Builder",
+				"ExternalServiceCredentialsGenerator.key:byte[]", 
+				"ExternalServiceCredentialsGenerator.userDerivationKey:byte[]",
+				"ExternalServiceCredentialsGenerator.shouldDeriveUsername():bolean"
+				}, 
+		secrecy = {"Secret.value():T", 
+				"ExternalServiceCredentialsGenerator.builder(byte[]):Builder",
+				"ExternalServiceCredentialsGenerator.key:byte[]", 
+				"ExternalServiceCredentialsGenerator.userDerivationKey:byte[]",
+				"ExternalServiceCredentialsGenerator.shouldDeriveUsername():bolean"})
 public class ExternalServiceCredentialsGenerator {
 
   private static final String DELIMITER = ":";
@@ -57,7 +74,6 @@ public class ExternalServiceCredentialsGenerator {
     return new Builder(key);
   }
 
-  @Secrecy
   private ExternalServiceCredentialsGenerator(
       final byte[] key,
       final byte[] userDerivationKey,
@@ -211,8 +227,9 @@ public class ExternalServiceCredentialsGenerator {
         .filter(ts -> currentTimeSeconds() - ts <= maxAgeSeconds);
   }
 
+  @Secrecy
   private boolean shouldDeriveUsername() {
-    return userDerivationKey.length > 0;
+    return userDerivationKey.length > 0; //&line[Leak-Key-Length]
   }
 
   private boolean hasUsernameTimestampPrefix() {
@@ -230,7 +247,11 @@ public class ExternalServiceCredentialsGenerator {
   private long currentTimeSeconds() {
     return clock.instant().getEpochSecond();
   }
-
+  
+  @Critical(secrecy = {"Builder.withUserDerivationKey(byte[]):Builder",
+		  "Secret.value():T",
+		  "ExternalServiceCredentialsGenerator(byte[],byte[],bolean,boolean,int,String,Function,Clock):void"
+		  })
   public static class Builder {
 
     private final byte[] key;
@@ -293,7 +314,6 @@ public class ExternalServiceCredentialsGenerator {
       return this;
     }
 
-    @Secrecy
     public ExternalServiceCredentialsGenerator build() {
       return new ExternalServiceCredentialsGenerator(
           key, userDerivationKey, prependUsername, truncateSignature, derivedUsernameTruncateLength, usernameTimestampPrefix, usernameTimestampTruncator, clock);

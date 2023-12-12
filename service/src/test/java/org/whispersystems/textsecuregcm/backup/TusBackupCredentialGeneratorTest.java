@@ -5,6 +5,7 @@
 
 package org.whispersystems.textsecuregcm.backup;
 
+import org.gravity.security.annotations.requirements.*;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.Test;
 import org.whispersystems.textsecuregcm.attachments.TusConfiguration;
@@ -16,11 +17,12 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Critical(secrecy = "SecretBytes.SecretBytes(byte[]):void")
 public class TusBackupCredentialGeneratorTest {
   @Test
   public void uploadGenerator() {
     TusBackupCredentialGenerator generator = new TusBackupCredentialGenerator(new TusConfiguration(
-        new SecretBytes(RandomUtils.nextBytes(32)),
+        new SecretBytes(RandomUtils.nextBytes(32)),	//&line[Randomness]
         "https://example.org/upload"));
 
     final MessageBackupUploadDescriptor messageBackupUploadDescriptor = generator.generateUpload("subdir", "key");
@@ -34,7 +36,7 @@ public class TusBackupCredentialGeneratorTest {
   @Test
   public void readCredential() {
     TusBackupCredentialGenerator generator = new TusBackupCredentialGenerator(new TusConfiguration(
-        new SecretBytes(RandomUtils.nextBytes(32)),
+        new SecretBytes(RandomUtils.nextBytes(32)),	//&line[Randomness]
         "https://example.org/upload"));
 
     final Map<String, String> headers = generator.readHeaders("subdir");

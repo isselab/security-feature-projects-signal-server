@@ -16,7 +16,19 @@
     <sqlite4java.version>1.0.392</sqlite4java.version>
   </properties>
 
+
+
+
   <dependencies>
+	<!-- 
+	<dependency>
+		<groupId>gravity</groupId>
+		<artifactId>security-annotations</artifactId>
+		<version>1.0</version>
+		<systemPath>${basedir}/.gravity/org.gravity.security.annotations.jar</systemPath>
+		<scope>system</scope>
+	</dependency>
+	 -->
     <dependency>
       <groupId>io.swagger.core.v3</groupId>
       <artifactId>swagger-jaxrs2</artifactId>
@@ -486,6 +498,47 @@
       <id>exclude-spam-filter</id>
       <build>
         <plugins>
+			<!-- try to install the jar via maven as a plugin? -->
+			<plugin>
+				<groupId> org.apache.maven.plugins</groupId>
+				<artifactId>maven-install-plugin</artifactId>
+				<version>3.1.1</version>
+				<executions>
+					<!-- gravity jar -->
+					<execution>
+						<id>install-jar-gravity</id>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<phase>validate</phase>
+						<configuration>
+							<groupId>org.gravity</groupId>
+							<artifactId>gravity-jar</artifactId>
+							<version>1.0</version>
+							<packaging>jar</packaging>
+							<file>${basedir}/.gravity/org.gravity.security.annotations.jar</file>
+							<generatePom>true</generatePom>
+						</configuration>
+					</execution>
+					<!-- braintre mock jar -->
+					<execution>
+						<id>install-jar-braintree-mock</id>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<phase>validate</phase>
+						<configuration>
+							<groupId>org.gravity</groupId>
+							<artifactId>braintree-jar</artifactId>
+							<version>1.0</version>
+							<packaging>jar</packaging>
+							<file>${basedir}/.braintree-mock/braintree_graphql_client.jar</file>
+							<generatePom>true</generatePom>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			 <!-- -->
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-shade-plugin</artifactId>

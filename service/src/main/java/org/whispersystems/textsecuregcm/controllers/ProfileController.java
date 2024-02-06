@@ -160,7 +160,7 @@ public class ProfileController {
   @PUT
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
-  public Response setProfile(@Auth AuthenticatedAccount auth, @NotNull @Valid CreateProfileRequest request) {
+  public Response setProfile(@Auth AuthenticatedAccount auth, @NotNull @Valid CreateProfileRequest request) { // &line[AccountAuthenticator]
 
     final Optional<VersionedProfile> currentProfile = profilesManager.get(auth.getAccount().getUuid(),
         request.getVersion());
@@ -224,7 +224,7 @@ public class ProfileController {
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/{identifier}/{version}")
   public VersionedProfileResponse getProfile(
-      @Auth Optional<AuthenticatedAccount> auth,
+      @Auth Optional<AuthenticatedAccount> auth, // &line[AccountAuthenticator]
       @HeaderParam(OptionalAccess.UNIDENTIFIED) Optional<Anonymous> accessKey,
       @Context ContainerRequestContext containerRequestContext,
       @PathParam("identifier") AciServiceIdentifier accountIdentifier,
@@ -244,7 +244,7 @@ public class ProfileController {
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/{identifier}/{version}/{credentialRequest}")
   public CredentialProfileResponse getProfile(
-      @Auth Optional<AuthenticatedAccount> auth,
+      @Auth Optional<AuthenticatedAccount> auth, // &line[AccountAuthenticator]
       @HeaderParam(OptionalAccess.UNIDENTIFIED) Optional<Anonymous> accessKey,
       @Context ContainerRequestContext containerRequestContext,
       @PathParam("identifier") AciServiceIdentifier accountIdentifier,
@@ -274,7 +274,7 @@ public class ProfileController {
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/{identifier}")
   public BaseProfileResponse getUnversionedProfile(
-      @Auth Optional<AuthenticatedAccount> auth,
+      @Auth Optional<AuthenticatedAccount> auth, // &line[AccountAuthenticator]
       @HeaderParam(OptionalAccess.UNIDENTIFIED) Optional<Anonymous> accessKey,
       @Context ContainerRequestContext containerRequestContext,
       @HeaderParam(HttpHeaders.USER_AGENT) String userAgent,

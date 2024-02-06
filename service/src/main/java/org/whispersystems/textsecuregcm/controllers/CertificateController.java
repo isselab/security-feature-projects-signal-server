@@ -72,7 +72,7 @@ public class CertificateController {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/delivery")
-  public DeliveryCertificate getDeliveryCertificate(@Auth AuthenticatedAccount auth,
+  public DeliveryCertificate getDeliveryCertificate(@Auth AuthenticatedAccount auth, // &line[AccountAuthenticator]
       @QueryParam("includeE164") @DefaultValue("true") boolean includeE164)
       throws InvalidKeyException {
 
@@ -91,7 +91,7 @@ public class CertificateController {
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/auth/group")
   public GroupCredentials getGroupAuthenticationCredentials(
-      @Auth AuthenticatedAccount auth,
+      @Auth AuthenticatedAccount auth, // &line[AccountAuthenticator]
       @QueryParam("redemptionStartSeconds") int startSeconds,
       @QueryParam("redemptionEndSeconds") int endSeconds,
       @QueryParam("pniAsServiceId") boolean pniAsServiceId) {

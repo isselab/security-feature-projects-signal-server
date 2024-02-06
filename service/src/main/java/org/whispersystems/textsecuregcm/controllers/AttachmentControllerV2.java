@@ -51,7 +51,7 @@ public class AttachmentControllerV2 {
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/form/upload")
   public AttachmentDescriptorV2 getAttachmentUploadForm(
-      @Auth AuthenticatedAccount auth,
+      @Auth AuthenticatedAccount auth, // &line[AccountAuthenticator]
       @HeaderParam(HttpHeaders.USER_AGENT) String userAgent)
       throws RateLimitExceededException {
     rateLimiter.validate(auth.getAccount().getUuid());

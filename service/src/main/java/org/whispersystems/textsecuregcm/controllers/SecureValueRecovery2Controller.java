@@ -77,7 +77,7 @@ public class SecureValueRecovery2Controller {
   )
   @ApiResponse(responseCode = "200", description = "`JSON` with generated credentials.", useReturnTypeSchema = true)
   @ApiResponse(responseCode = "401", description = "Account authentication check failed.")
-  public ExternalServiceCredentials getAuth(@Auth final AuthenticatedAccount auth) {
+  public ExternalServiceCredentials getAuth(@Auth final AuthenticatedAccount auth) { // &line[AccountAuthenticator]
     return backupServiceCredentialGenerator.generateFor(auth.getAccount().getUuid().toString());
   }
 

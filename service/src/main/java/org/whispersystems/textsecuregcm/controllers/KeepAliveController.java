@@ -40,7 +40,7 @@ public class KeepAliveController {
   }
 
   @GET
-  public Response getKeepAlive(@Auth Optional<AuthenticatedAccount> maybeAuth,
+  public Response getKeepAlive(@Auth Optional<AuthenticatedAccount> maybeAuth, // &line[AccountAuthenticator]
       @WebSocketSession WebSocketSessionContext context) {
 
     maybeAuth.ifPresent(auth -> {

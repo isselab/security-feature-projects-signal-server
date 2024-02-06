@@ -78,7 +78,7 @@ public class DonationController {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces({MediaType.APPLICATION_JSON, MediaType.TEXT_PLAIN})
   public CompletionStage<Response> redeemReceipt(
-      @Auth final AuthenticatedAccount auth,
+      @Auth final AuthenticatedAccount auth, // &line[AccountAuthenticator]
       @NotNull @Valid final RedeemReceiptRequest request) {
     return CompletableFuture.supplyAsync(() -> {
       ReceiptCredentialPresentation receiptCredentialPresentation;

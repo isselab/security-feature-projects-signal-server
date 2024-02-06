@@ -40,7 +40,7 @@ public class ProvisioningController {
   @PUT
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public void sendProvisioningMessage(@Auth AuthenticatedAccount auth,
+  public void sendProvisioningMessage(@Auth AuthenticatedAccount auth, // &line[AccountAuthenticator]
       @PathParam("destination") String destinationName,
       @NotNull @Valid ProvisioningMessage message)
       throws RateLimitExceededException {

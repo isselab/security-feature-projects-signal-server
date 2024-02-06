@@ -51,7 +51,7 @@ public class CallLinkController {
   @ApiResponse(responseCode = "422", description = "Invalid request format.")
   @ApiResponse(responseCode = "429", description = "Ratelimited.")
   public CreateCallLinkCredential getCreateAuth(
-      final @Auth AuthenticatedAccount auth,
+      final @Auth AuthenticatedAccount auth, // &line[AccountAuthenticator]
       final @NotNull @Valid GetCreateCallLinkCredentialsRequest request
   ) throws RateLimitExceededException {
 

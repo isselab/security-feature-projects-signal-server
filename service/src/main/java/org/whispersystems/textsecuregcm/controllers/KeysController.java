@@ -96,7 +96,7 @@ public class KeysController {
       description = "Gets the number of one-time prekeys uploaded for this device and still available")
   @ApiResponse(responseCode = "200", description = "Body contains the number of available one-time prekeys for the device.", useReturnTypeSchema = true)
   @ApiResponse(responseCode = "401", description = "Account authentication check failed.")
-  public CompletableFuture<PreKeyCount> getStatus(@Auth final AuthenticatedAccount auth,
+  public CompletableFuture<PreKeyCount> getStatus(@Auth final AuthenticatedAccount auth, // &line[AccountAuthenticator]
       @QueryParam("identity") final Optional<String> identityType) {
 
     final CompletableFuture<Integer> ecCountFuture =
@@ -121,7 +121,7 @@ public class KeysController {
   @ApiResponse(responseCode = "401", description = "Account authentication check failed.")
   @ApiResponse(responseCode = "403", description = "Attempt to change identity key from a non-primary device.")
   @ApiResponse(responseCode = "422", description = "Invalid request format.")
-  public CompletableFuture<Void> setKeys(@Auth final DisabledPermittedAuthenticatedAccount disabledPermittedAuth,
+  public CompletableFuture<Void> setKeys(@Auth final DisabledPermittedAuthenticatedAccount disabledPermittedAuth, // &line[DisabledPermittedAccountAuthenticator]
       @RequestBody @NotNull @Valid final PreKeyState preKeys,
 
       @Parameter(allowEmptyValue=true)
@@ -203,7 +203,7 @@ public class KeysController {
   @ApiResponse(responseCode = "429", description = "Rate limit exceeded.", headers = @Header(
       name = "Retry-After",
       description = "If present, a positive integer indicating the number of seconds before a subsequent attempt could succeed"))
-  public PreKeyResponse getDeviceKeys(@Auth Optional<AuthenticatedAccount> auth,
+  public PreKeyResponse getDeviceKeys(@Auth Optional<AuthenticatedAccount> auth, // &line[AccountAuthenticator]
       @HeaderParam(OptionalAccess.UNIDENTIFIED) Optional<Anonymous> accessKey,
 
       @Parameter(description="the account or phone-number identifier to retrieve keys for")
@@ -299,7 +299,7 @@ public class KeysController {
   @ApiResponse(responseCode = "200", description = "Indicates that new prekey was successfully stored.")
   @ApiResponse(responseCode = "401", description = "Account authentication check failed.")
   @ApiResponse(responseCode = "422", description = "Invalid request format.")
-  public CompletableFuture<Void> setSignedKey(@Auth final AuthenticatedAccount auth,
+  public CompletableFuture<Void> setSignedKey(@Auth final AuthenticatedAccount auth, // &line[AccountAuthenticator]
       @Valid final ECSignedPreKey signedPreKey,
       @QueryParam("identity") final Optional<String> identityType) {
 

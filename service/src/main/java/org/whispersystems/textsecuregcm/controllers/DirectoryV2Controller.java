@@ -47,7 +47,7 @@ public class DirectoryV2Controller {
   @GET
   @Path("/auth")
   @Produces(MediaType.APPLICATION_JSON)
-  public Response getAuthToken(final @Auth AuthenticatedAccount auth) {
+  public Response getAuthToken(final @Auth AuthenticatedAccount auth) { // &line[AccountAuthenticator]
     final UUID uuid = auth.getAccount().getUuid();
     final ExternalServiceCredentials credentials = directoryServiceTokenGenerator.generateForUuid(uuid);
     return Response.ok().entity(credentials).build();

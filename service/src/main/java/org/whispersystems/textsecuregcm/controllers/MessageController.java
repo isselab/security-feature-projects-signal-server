@@ -190,7 +190,7 @@ public class MessageController {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   @FilterSpam
-  public Response sendMessage(@Auth Optional<AuthenticatedAccount> source,
+  public Response sendMessage(@Auth Optional<AuthenticatedAccount> source, // &line[AccountAuthenticator]
       @HeaderParam(OptionalAccess.UNIDENTIFIED) Optional<Anonymous> accessKey,
       @HeaderParam(HttpHeaders.USER_AGENT) String userAgent,
       @HeaderParam(HttpHeaders.X_FORWARDED_FOR) String forwardedFor,
@@ -530,7 +530,7 @@ public class MessageController {
   @Timed
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  public CompletableFuture<OutgoingMessageEntityList> getPendingMessages(@Auth AuthenticatedAccount auth,
+  public CompletableFuture<OutgoingMessageEntityList> getPendingMessages(@Auth AuthenticatedAccount auth, // &line[AccountAuthenticator]
       @HeaderParam(Stories.X_SIGNAL_RECEIVE_STORIES) String receiveStoriesHeader,
       @HeaderParam(HttpHeaders.USER_AGENT) String userAgent) {
 
@@ -581,7 +581,7 @@ public class MessageController {
   @Timed
   @DELETE
   @Path("/uuid/{uuid}")
-  public CompletableFuture<Void> removePendingMessage(@Auth AuthenticatedAccount auth, @PathParam("uuid") UUID uuid) {
+  public CompletableFuture<Void> removePendingMessage(@Auth AuthenticatedAccount auth, @PathParam("uuid") UUID uuid) { // &line[AccountAuthenticator]
     return messagesManager.delete(
             auth.getAccount().getUuid(),
             auth.getAuthenticatedDevice().getId(),
@@ -611,7 +611,7 @@ public class MessageController {
   @Consumes(MediaType.APPLICATION_JSON)
   @Path("/report/{source}/{messageGuid}")
   public Response reportSpamMessage(
-      @Auth AuthenticatedAccount auth,
+      @Auth AuthenticatedAccount auth, // &line[AccountAuthenticator]
       @PathParam("source") String source,
       @PathParam("messageGuid") UUID messageGuid,
       @Nullable @Valid SpamReport spamReport,

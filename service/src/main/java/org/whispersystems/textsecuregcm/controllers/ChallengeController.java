@@ -76,7 +76,7 @@ public class ChallengeController {
   @ApiResponse(responseCode = "429", description = "Too many attempts", headers = @Header(
       name = "Retry-After",
       description = "If present, an positive integer indicating the number of seconds before a subsequent attempt could succeed"))
-  public Response handleChallengeResponse(@Auth final AuthenticatedAccount auth,
+  public Response handleChallengeResponse(@Auth final AuthenticatedAccount auth, // &line[AccountAuthenticator]
       @Valid final AnswerChallengeRequest answerRequest,
       @HeaderParam(HttpHeaders.X_FORWARDED_FOR) final String forwardedFor,
       @HeaderParam(HttpHeaders.USER_AGENT) final String userAgent,
@@ -161,7 +161,7 @@ public class ChallengeController {
   @ApiResponse(responseCode = "429", description = "Too many attempts", headers = @Header(
       name = "Retry-After",
       description = "If present, an positive integer indicating the number of seconds before a subsequent attempt could succeed"))
-  public Response requestPushChallenge(@Auth final AuthenticatedAccount auth,
+  public Response requestPushChallenge(@Auth final AuthenticatedAccount auth, // &line[AccountAuthenticator]
       @Extract PushChallengeConfig pushChallengeConfig) {
     if (!pushChallengeConfig.pushPermitted()) {
       return Response.status(429).build();

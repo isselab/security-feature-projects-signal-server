@@ -77,7 +77,7 @@ public class RemoteConfigController {
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  public UserRemoteConfigList getAll(@Auth AuthenticatedAccount auth) {
+  public UserRemoteConfigList getAll(@Auth AuthenticatedAccount auth) { // &line[AccountAuthenticator]
     try {
       MessageDigest digest = MessageDigest.getInstance("SHA1");
 

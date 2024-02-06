@@ -389,7 +389,7 @@ public class AccountController {
   @ApiResponse(responseCode = "400", description = "Request must not be authenticated.")
   @ApiResponse(responseCode = "404", description = "Account not found for the given username.")
   public CompletableFuture<AccountIdentifierResponse> lookupUsernameHash(
-      @Auth final Optional<AuthenticatedAccount> maybeAuthenticatedAccount,
+      @Auth final Optional<AuthenticatedAccount> maybeAuthenticatedAccount, // &line[AccountAuthenticator]
       @PathParam("usernameHash") final String usernameHash) {
 
     requireNotAuthenticated(maybeAuthenticatedAccount);
@@ -479,7 +479,7 @@ public class AccountController {
   @ApiResponse(responseCode = "422", description = "Invalid request format.")
   @ApiResponse(responseCode = "429", description = "Ratelimited.")
   public CompletableFuture<EncryptedUsername> lookupUsernameLink(
-      @Auth final Optional<AuthenticatedAccount> maybeAuthenticatedAccount,
+      @Auth final Optional<AuthenticatedAccount> maybeAuthenticatedAccount, // &line[AccountAuthenticator]
       @PathParam("uuid") final UUID usernameLinkHandle) {
 
     requireNotAuthenticated(maybeAuthenticatedAccount);

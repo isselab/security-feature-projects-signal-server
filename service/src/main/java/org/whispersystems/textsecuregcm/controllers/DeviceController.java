@@ -124,7 +124,7 @@ public class DeviceController {
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  public DeviceInfoList getDevices(@Auth AuthenticatedAccount auth) {
+  public DeviceInfoList getDevices(@Auth AuthenticatedAccount auth) { // &line[AccountAuthenticator]
     List<DeviceInfo> devices = new LinkedList<>();
 
     for (Device device : auth.getAccount().getDevices()) {
@@ -139,7 +139,7 @@ public class DeviceController {
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/{device_id}")
   @ChangesDeviceEnabledState
-  public void removeDevice(@Auth AuthenticatedAccount auth, @PathParam("device_id") byte deviceId) {
+  public void removeDevice(@Auth AuthenticatedAccount auth, @PathParam("device_id") byte deviceId) { // &line[AccountAuthenticator]
     Account account = auth.getAccount();
     if (auth.getAuthenticatedDevice().getId() != Device.PRIMARY_ID) {
       throw new WebApplicationException(Response.Status.UNAUTHORIZED);
@@ -162,7 +162,7 @@ public class DeviceController {
   @GET
   @Path("/provisioning/code")
   @Produces(MediaType.APPLICATION_JSON)
-  public VerificationCode createDeviceToken(@Auth AuthenticatedAccount auth)
+  public VerificationCode createDeviceToken(@Auth AuthenticatedAccount auth) // &line[AccountAuthenticator]
       throws RateLimitExceededException, DeviceLimitExceededException {
 
     final Account account = auth.getAccount();
@@ -250,7 +250,7 @@ public class DeviceController {
   @PUT
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/unauthenticated_delivery")
-  public void setUnauthenticatedDelivery(@Auth AuthenticatedAccount auth) {
+  public void setUnauthenticatedDelivery(@Auth AuthenticatedAccount auth) { // &line[AccountAuthenticator]
     assert (auth.getAuthenticatedDevice() != null);
     // Deprecated
   }
@@ -258,7 +258,7 @@ public class DeviceController {
   @PUT
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/capabilities")
-  public void setCapabilities(@Auth AuthenticatedAccount auth, @NotNull @Valid DeviceCapabilities capabilities) {
+  public void setCapabilities(@Auth AuthenticatedAccount auth, @NotNull @Valid DeviceCapabilities capabilities) { // &line[AccountAuthenticator]
     assert (auth.getAuthenticatedDevice() != null);
     final byte deviceId = auth.getAuthenticatedDevice().getId();
     accounts.updateDevice(auth.getAccount(), deviceId, d -> d.setCapabilities(capabilities));

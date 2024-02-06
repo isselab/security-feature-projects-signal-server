@@ -76,7 +76,7 @@ public class AttachmentControllerV4 {
   @ApiResponse(responseCode = "429", description = "Too many attempts", headers = @Header(
       name = "Retry-After",
       description = "If present, an positive integer indicating the number of seconds before a subsequent attempt could succeed"))
-  public AttachmentDescriptorV3 getAttachmentUploadForm(@Auth AuthenticatedAccount auth)
+  public AttachmentDescriptorV3 getAttachmentUploadForm(@Auth AuthenticatedAccount auth) // &line[AccountAuthenticator]
       throws RateLimitExceededException {
     rateLimiter.validate(auth.getAccount().getUuid());
     final String key = generateAttachmentKey();

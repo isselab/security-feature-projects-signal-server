@@ -236,7 +236,7 @@ public class SubscriptionController {
   @Path("/{subscriberId}")
   @Produces(MediaType.APPLICATION_JSON)
   public CompletableFuture<Response> deleteSubscriber(
-      @Auth Optional<AuthenticatedAccount> authenticatedAccount,
+      @Auth Optional<AuthenticatedAccount> authenticatedAccount, // &line[AccountAuthenticator]
       @PathParam("subscriberId") String subscriberId) {
     RequestData requestData = RequestData.process(authenticatedAccount, subscriberId, clock);
     return subscriptionManager.get(requestData.subscriberUser, requestData.hmac)
@@ -258,7 +258,7 @@ public class SubscriptionController {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public CompletableFuture<Response> updateSubscriber(
-      @Auth Optional<AuthenticatedAccount> authenticatedAccount,
+      @Auth Optional<AuthenticatedAccount> authenticatedAccount, // &line[AccountAuthenticator]
       @PathParam("subscriberId") String subscriberId) {
     RequestData requestData = RequestData.process(authenticatedAccount, subscriberId, clock);
     return subscriptionManager.get(requestData.subscriberUser, requestData.hmac)
@@ -292,7 +292,7 @@ public class SubscriptionController {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public CompletableFuture<Response> createPaymentMethod(
-      @Auth Optional<AuthenticatedAccount> authenticatedAccount,
+      @Auth Optional<AuthenticatedAccount> authenticatedAccount, // &line[AccountAuthenticator]
       @PathParam("subscriberId") String subscriberId,
       @QueryParam("type") @DefaultValue("CARD") PaymentMethod paymentMethodType) {
 
@@ -346,7 +346,7 @@ public class SubscriptionController {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public CompletableFuture<Response> createPayPalPaymentMethod(
-      @Auth Optional<AuthenticatedAccount> authenticatedAccount,
+      @Auth Optional<AuthenticatedAccount> authenticatedAccount, // &line[AccountAuthenticator]
       @PathParam("subscriberId") String subscriberId,
       @NotNull @Valid CreatePayPalBillingAgreementRequest request,
       @Context ContainerRequestContext containerRequestContext) {
@@ -411,7 +411,7 @@ public class SubscriptionController {
   @Produces(MediaType.APPLICATION_JSON)
   @Deprecated // use /{subscriberId}/default_payment_method/{processor}/{paymentMethodId}
   public CompletableFuture<Response> setDefaultPaymentMethod(
-      @Auth Optional<AuthenticatedAccount> authenticatedAccount,
+      @Auth Optional<AuthenticatedAccount> authenticatedAccount, // &line[AccountAuthenticator]
       @PathParam("subscriberId") String subscriberId,
       @PathParam("paymentMethodId") @NotEmpty String paymentMethodId) {
     RequestData requestData = RequestData.process(authenticatedAccount, subscriberId, clock);
@@ -427,7 +427,7 @@ public class SubscriptionController {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public CompletableFuture<Response> setDefaultPaymentMethodWithProcessor(
-      @Auth Optional<AuthenticatedAccount> authenticatedAccount,
+      @Auth Optional<AuthenticatedAccount> authenticatedAccount, // &line[AccountAuthenticator]
       @PathParam("subscriberId") String subscriberId,
       @PathParam("processor") SubscriptionProcessor processor,
       @PathParam("paymentMethodToken") @NotEmpty String paymentMethodToken) {
@@ -458,7 +458,7 @@ public class SubscriptionController {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public CompletableFuture<Response> setSubscriptionLevel(
-      @Auth Optional<AuthenticatedAccount> authenticatedAccount,
+      @Auth Optional<AuthenticatedAccount> authenticatedAccount, // &line[AccountAuthenticator]
       @PathParam("subscriberId") String subscriberId,
       @PathParam("level") long level,
       @PathParam("currency") String currency,
@@ -890,7 +890,7 @@ public class SubscriptionController {
   @Path("/{subscriberId}")
   @Produces(MediaType.APPLICATION_JSON)
   public CompletableFuture<Response> getSubscriptionInformation(
-      @Auth Optional<AuthenticatedAccount> authenticatedAccount,
+      @Auth Optional<AuthenticatedAccount> authenticatedAccount, // &line[AccountAuthenticator]
       @PathParam("subscriberId") String subscriberId) {
     RequestData requestData = RequestData.process(authenticatedAccount, subscriberId, clock);
     return subscriptionManager.get(requestData.subscriberUser, requestData.hmac)
@@ -933,7 +933,7 @@ public class SubscriptionController {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public CompletableFuture<Response> createSubscriptionReceiptCredentials(
-      @Auth Optional<AuthenticatedAccount> authenticatedAccount,
+      @Auth Optional<AuthenticatedAccount> authenticatedAccount, // &line[AccountAuthenticator]
       @HeaderParam(HttpHeaders.USER_AGENT) final String userAgent,
       @PathParam("subscriberId") String subscriberId,
       @NotNull @Valid GetReceiptCredentialsRequest request) {
@@ -982,7 +982,7 @@ public class SubscriptionController {
   @Path("/{subscriberId}/default_payment_method_for_ideal/{setupIntentId}")
   @Produces(MediaType.APPLICATION_JSON)
   public CompletableFuture<Response> setDefaultPaymentMethodForIdeal(
-      @Auth Optional<AuthenticatedAccount> authenticatedAccount,
+      @Auth Optional<AuthenticatedAccount> authenticatedAccount, // &line[AccountAuthenticator]
       @PathParam("subscriberId") String subscriberId,
       @PathParam("setupIntentId") @NotEmpty String setupIntentId) {
     RequestData requestData = RequestData.process(authenticatedAccount, subscriberId, clock);

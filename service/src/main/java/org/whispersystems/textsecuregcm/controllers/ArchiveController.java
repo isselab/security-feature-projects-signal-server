@@ -89,7 +89,7 @@ public class ArchiveController {
   @ApiResponse(responseCode = "400", description = "The provided backup auth credential request was invalid")
   @ApiResponse(responseCode = "429", description = "Rate limited. Too many attempts to change the backup-id have been made")
   public CompletionStage<Void> setBackupId(
-      @Auth final AuthenticatedAccount account,
+      @Auth final AuthenticatedAccount account, // &line[AccountAuthenticator]
       @Valid @NotNull final SetBackupIdRequest setBackupIdRequest) throws RateLimitExceededException {
     return this.backupAuthManager.commitBackupId(account.getAccount(), setBackupIdRequest.backupAuthCredentialRequest);
   }
@@ -121,7 +121,7 @@ public class ArchiveController {
   @ApiResponse(responseCode = "404", description = "Could not find an existing blinded backup id")
   @ApiResponse(responseCode = "429", description = "Rate limited.")
   public CompletionStage<BackupAuthCredentialsResponse> getBackupZKCredentials(
-      @Auth AuthenticatedAccount auth,
+      @Auth AuthenticatedAccount auth, // &line[AccountAuthenticator]
       @NotNull @QueryParam("redemptionStartSeconds") Integer startSeconds,
       @NotNull @QueryParam("redemptionEndSeconds") Integer endSeconds) {
 
@@ -191,7 +191,7 @@ public class ArchiveController {
   @ApiResponse(responseCode = "429", description = "Rate limited.")
   @ApiResponseZkAuth
   public CompletionStage<ReadAuthResponse> readAuth(
-      @Auth final Optional<AuthenticatedAccount> account,
+      @Auth final Optional<AuthenticatedAccount> account, // &line[AccountAuthenticator]
 
       @Parameter(description = BackupAuthCredentialPresentationHeader.DESCRIPTION, schema = @Schema(implementation = String.class))
       @NotNull
@@ -232,7 +232,7 @@ public class ArchiveController {
   @ApiResponse(responseCode = "429", description = "Rate limited.")
   @ApiResponseZkAuth
   public CompletionStage<BackupInfoResponse> backupInfo(
-      @Auth final Optional<AuthenticatedAccount> account,
+      @Auth final Optional<AuthenticatedAccount> account, // &line[AccountAuthenticator]
 
       @Parameter(description = BackupAuthCredentialPresentationHeader.DESCRIPTION, schema = @Schema(implementation = String.class))
       @NotNull
@@ -275,7 +275,7 @@ public class ArchiveController {
   @ApiResponse(responseCode = "204", description = "The public key was set")
   @ApiResponse(responseCode = "429", description = "Rate limited.")
   public CompletionStage<Void> setPublicKey(
-      @Auth final Optional<AuthenticatedAccount> account,
+      @Auth final Optional<AuthenticatedAccount> account, // &line[AccountAuthenticator]
 
       @Parameter(description = BackupAuthCredentialPresentationHeader.DESCRIPTION, schema = @Schema(implementation = String.class))
       @NotNull
@@ -312,7 +312,7 @@ public class ArchiveController {
   @ApiResponse(responseCode = "429", description = "Rate limited.")
   @ApiResponseZkAuth
   public CompletionStage<MessageBackupResponse> backup(
-      @Auth final Optional<AuthenticatedAccount> account,
+      @Auth final Optional<AuthenticatedAccount> account, // &line[AccountAuthenticator]
 
       @Parameter(description = BackupAuthCredentialPresentationHeader.DESCRIPTION, schema = @Schema(implementation = String.class))
       @NotNull
@@ -346,7 +346,7 @@ public class ArchiveController {
   @ApiResponse(responseCode = "429", description = "Rate limited.")
   @ApiResponseZkAuth
   public CompletionStage<Void> refresh(
-      @Auth final Optional<AuthenticatedAccount> account,
+      @Auth final Optional<AuthenticatedAccount> account, // &line[AccountAuthenticator]
 
       @Parameter(description = BackupAuthCredentialPresentationHeader.DESCRIPTION, schema = @Schema(implementation = String.class))
       @NotNull

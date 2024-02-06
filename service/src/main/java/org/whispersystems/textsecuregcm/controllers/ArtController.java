@@ -42,7 +42,7 @@ public class ArtController {
   @GET
   @Path("/auth")
   @Produces(MediaType.APPLICATION_JSON)
-  public ExternalServiceCredentials getAuth(final @Auth AuthenticatedAccount auth)
+  public ExternalServiceCredentials getAuth(final @Auth AuthenticatedAccount auth) // &line[AccountAuthenticator]
     throws RateLimitExceededException {
     final UUID uuid = auth.getAccount().getUuid();
     rateLimiters.forDescriptor(RateLimiters.For.EXTERNAL_SERVICE_CREDENTIALS).validate(uuid);

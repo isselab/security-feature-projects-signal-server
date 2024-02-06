@@ -42,14 +42,14 @@ public class PaymentsController {
   @GET
   @Path("/auth")
   @Produces(MediaType.APPLICATION_JSON)
-  public ExternalServiceCredentials getAuth(final @Auth AuthenticatedAccount auth) {
+  public ExternalServiceCredentials getAuth(final @Auth AuthenticatedAccount auth) { // &line[AccountAuthenticator]
     return paymentsServiceCredentialsGenerator.generateForUuid(auth.getAccount().getUuid());
   }
 
   @GET
   @Path("/conversions")
   @Produces(MediaType.APPLICATION_JSON)
-  public CurrencyConversionEntityList getConversions(final @Auth AuthenticatedAccount auth) {
+  public CurrencyConversionEntityList getConversions(final @Auth AuthenticatedAccount auth) { // &line[AccountAuthenticator]
     return currencyManager.getCurrencyConversions().orElseThrow();
   }
 }

@@ -1,6 +1,11 @@
 SignalServer
-  Authentication
+  Auth
     Authenticator
       BaseAccountAuthenticator
       AccountAuthenticator
       DisabledPermittedAccountAuthenticator
+    Verification
+      PhoneVerification
+      RecoveryPasswordVerification
+      SessionVerification
+

@@ -105,7 +105,7 @@ public class AccountControllerV2 {
 
       RateLimiter.adaptLegacyException(() -> rateLimiters.getRegistrationLimiter().validate(number));
 
-      final PhoneVerificationRequest.VerificationType verificationType = phoneVerificationTokenManager.verify(number,
+      final PhoneVerificationRequest.VerificationType verificationType = phoneVerificationTokenManager.verify(number, // &line[PhoneVerification]
           request);
 
       final Optional<Account> existingAccount = accountsManager.getByE164(number);

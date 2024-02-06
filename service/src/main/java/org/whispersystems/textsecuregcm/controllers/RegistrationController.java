@@ -119,7 +119,7 @@ public class RegistrationController {
       throw new WebApplicationException(Response.status(422, "account attributes invalid").build());
     }
 
-    final PhoneVerificationRequest.VerificationType verificationType = phoneVerificationTokenManager.verify(number,
+    final PhoneVerificationRequest.VerificationType verificationType = phoneVerificationTokenManager.verify(number, // &line[PhoneVerification]
         registrationRequest);
 
     final Optional<Account> existingAccount = accounts.getByE164(number);

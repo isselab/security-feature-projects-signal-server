@@ -29,7 +29,7 @@ public class RegistrationRecoveryPasswordsManager {
     this.registrationRecoveryPasswords = requireNonNull(registrationRecoveryPasswords);
   }
 
-  // Security Feature: Password Verification
+  // &begin[RecoveryPasswordVerification]
   public CompletableFuture<Boolean> verify(final String number, final byte[] password) {
     return registrationRecoveryPasswords.lookup(number)
         .thenApply(maybeHash -> maybeHash.filter(hash -> hash.verify(bytesToString(password))))
@@ -40,6 +40,7 @@ public class RegistrationRecoveryPasswordsManager {
         })
         .thenApply(Optional::isPresent);
   }
+  // &end[RecoveryPasswordVerification]
 
   @Integrity
   public CompletableFuture<Void> storeForCurrentNumber(final String number, final byte[] password) {

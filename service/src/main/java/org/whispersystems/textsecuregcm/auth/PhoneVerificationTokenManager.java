@@ -54,18 +54,22 @@ public class PhoneVerificationTokenManager {
    * @throws ForbiddenException     if the recovery password is not valid
    * @throws InterruptedException   if verification did not complete before a timeout
    */
+  // &begin[PhoneVerification]
   public PhoneVerificationRequest.VerificationType verify(final String number, final PhoneVerificationRequest request)
       throws InterruptedException {
 
     final PhoneVerificationRequest.VerificationType verificationType = request.verificationType();
     switch (verificationType) {
-      case SESSION -> verifyBySessionId(number, request.decodeSessionId());
-      case RECOVERY_PASSWORD -> verifyByRecoveryPassword(number, request.recoveryPassword());
+      case SESSION -> verifyBySessionId(number, request.decodeSessionId()); // &line[SessionVerification]
+      case RECOVERY_PASSWORD ->
+          verifyByRecoveryPassword(number, request.recoveryPassword()); // &line[RecoveryPasswordVerification]
     }
 
     return verificationType;
   }
+  // &end[PhoneVerification]
 
+  // &begin[SessionVerification]
   private void verifyBySessionId(final String number, final byte[] sessionId) throws InterruptedException {
     try {
       final RegistrationServiceSession session = registrationServiceClient
@@ -96,7 +100,9 @@ public class PhoneVerificationTokenManager {
       throw new ServerErrorException(Response.Status.SERVICE_UNAVAILABLE);
     }
   }
+  // &end[SessionVerification]
 
+  // &begin[RecoveryPasswordVerification]
   private void verifyByRecoveryPassword(final String number, final byte[] recoveryPassword)
       throws InterruptedException {
     try {
@@ -109,5 +115,6 @@ public class PhoneVerificationTokenManager {
       throw new ServerErrorException(Response.Status.SERVICE_UNAVAILABLE);
     }
   }
+  // &end[RecoveryPasswordVerification]
 
 }

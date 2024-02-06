@@ -468,8 +468,10 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
         config.getAdminEventLoggingConfiguration().projectId(),
         config.getAdminEventLoggingConfiguration().logName());
 
+    // Security: stripeManager is Sink for apiKey and idempotencyKeyGenerator (needs manual review)
     StripeManager stripeManager = new StripeManager(config.getStripe().apiKey().value(), subscriptionProcessorExecutor, // &line[SecretAccess]
         config.getStripe().idempotencyKeyGenerator().value(), config.getStripe().boostDescription(), config.getStripe().supportedCurrenciesByPaymentMethod()); // &line[SecretAccess]
+    // Security: braintreeManager is Sink for privateKey (needs manual review)
     BraintreeManager braintreeManager = new BraintreeManager(config.getBraintree().merchantId(),
         config.getBraintree().publicKey(), config.getBraintree().privateKey().value(), // &line[SecretAccess]
         config.getBraintree().environment(),
@@ -530,6 +532,7 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
         experimentEnrollmentManager, registrationRecoveryPasswordsManager, accountLockExecutor, clock);
     RemoteConfigsManager remoteConfigsManager = new RemoteConfigsManager(remoteConfigs);
     APNSender apnSender = new APNSender(apnSenderExecutor, config.getApnConfiguration());
+    // Security: fcmSender is Sink for firebase credentials (needs manual review)
     FcmSender fcmSender = new FcmSender(fcmSenderExecutor, config.getFcmConfiguration().credentials().value()); // &line[SecretAccess]
     ApnPushNotificationScheduler apnPushNotificationScheduler = new ApnPushNotificationScheduler(pushSchedulerCluster,
         apnSender, accountsManager, 0);
@@ -569,6 +572,7 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
         pushNotificationManager,
         pushLatencyManager);
     final ReceiptSender receiptSender = new ReceiptSender(accountsManager, messageSender, receiptSenderExecutor);
+    // Security: turnTokenGenerator is Sink for secret turn config (needs manual review)
     final TurnTokenGenerator turnTokenGenerator = new TurnTokenGenerator(dynamicConfigurationManager,
         config.getTurnSecretConfiguration().secret().value()); // &line[SecretAccess]
 
@@ -581,6 +585,7 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
         config.getRecaptchaConfiguration().projectPath(),
         config.getRecaptchaConfiguration().credentialConfigurationJson(),
         dynamicConfigurationManager);
+    // Security: hCaptchaClient is Sink for apiKey (needs manual review)
     HCaptchaClient hCaptchaClient = new HCaptchaClient(
         config.getHCaptchaConfiguration().getApiKey().value(), // &line[SecretAccess]
         hcaptchaRetryExecutor,
@@ -600,7 +605,9 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
     ChangeNumberManager changeNumberManager = new ChangeNumberManager(messageSender, accountsManager);
 
     HttpClient currencyClient = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).connectTimeout(Duration.ofSeconds(10)).build();
+    // Security: fixerClient is Sink for apiKey (needs manual review)
     FixerClient fixerClient = new FixerClient(currencyClient, config.getPaymentsServiceConfiguration().fixerApiKey().value()); // &line[SecretAccess]
+    // Security: coinMarketCapClient is Sink for apiKey (needs manual review)
     CoinMarketCapClient coinMarketCapClient = new CoinMarketCapClient(currencyClient, config.getPaymentsServiceConfiguration().coinMarketCapApiKey().value(), config.getPaymentsServiceConfiguration().coinMarketCapCurrencyIds()); // &line[SecretAccess]
     CurrencyConversionManager currencyManager = new CurrencyConversionManager(fixerClient, coinMarketCapClient,
         cacheCluster, config.getPaymentsServiceConfiguration().paymentCurrencies(), recurringJobExecutor, Clock.systemUTC());
@@ -617,6 +624,7 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
     final RegistrationCaptchaManager registrationCaptchaManager = new RegistrationCaptchaManager(captchaChecker,
         rateLimiters, config.getTestDevices(), dynamicConfigurationManager);
 
+    // Security: AwsBasicCredentials is Sink for credentials (needs manual review)
     StaticCredentialsProvider cdnCredentialsProvider = StaticCredentialsProvider
         .create(AwsBasicCredentials.create(
             config.getCdnConfiguration().accessKey().value(), // &line[SecretAccess]
@@ -630,6 +638,7 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
         .region(Region.of(config.getCdnConfiguration().region()))
         .build();
 
+    // Security: gcsAttachmentGenerator is Sink for rsa signing key (needs manual review)
     final GcsAttachmentGenerator gcsAttachmentGenerator = new GcsAttachmentGenerator(
         config.getGcpAttachmentsConfiguration().domain(),
         config.getGcpAttachmentsConfiguration().email(),
@@ -637,13 +646,18 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
         config.getGcpAttachmentsConfiguration().pathPrefix(),
         config.getGcpAttachmentsConfiguration().rsaSigningKey().value()); // &line[SecretAccess]
 
+    // Security: profileCdnPolicyGenerate is Sink for cdn access key (needs manual review)
     PostPolicyGenerator profileCdnPolicyGenerator = new PostPolicyGenerator(config.getCdnConfiguration().region(),
         config.getCdnConfiguration().bucket(), config.getCdnConfiguration().accessKey().value()); // &line[SecretAccess]
+    // Security: profileCdnPolicySigner is Sink for cdn access secret (needs manual review)
     PolicySigner profileCdnPolicySigner = new PolicySigner(config.getCdnConfiguration().accessSecret().value(), // &line[SecretAccess]
         config.getCdnConfiguration().region());
 
+    // Security: zkSecretParams is Sink for zero knowledge server secret (needs manual review)
     ServerSecretParams zkSecretParams = new ServerSecretParams(config.getZkConfig().serverSecret().value()); // &line[SecretAccess]
+    // Security: callingGenericZkSecretParams is Sink for calling zk server secret (needs manual review)
     GenericServerSecretParams callingGenericZkSecretParams = new GenericServerSecretParams(config.getCallingZkConfig().serverSecret().value()); // &line[SecretAccess]
+    // Security: backupsGenericZkSecretParams is Sink for backup zk server secret (needs manual review)
     GenericServerSecretParams backupsGenericZkSecretParams = new GenericServerSecretParams(config.getBackupsZkConfig().serverSecret().value()); // &line[SecretAccess]
     ServerZkProfileOperations zkProfileOperations = new ServerZkProfileOperations(zkSecretParams);
     ServerZkAuthOperations zkAuthOperations = new ServerZkAuthOperations(zkSecretParams);
@@ -778,13 +792,16 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
         new AccountControllerV2(accountsManager, changeNumberManager, phoneVerificationTokenManager,
             registrationLockVerificationManager, rateLimiters),
         new ArtController(rateLimiters, artCredentialsGenerator),
+        // Security: AttachmentControllerV2 is Sink for accessKey (needs manual review)
         new AttachmentControllerV2(rateLimiters, config.getAwsAttachmentsConfiguration().accessKey().value(), config.getAwsAttachmentsConfiguration().accessSecret().value(), config.getAwsAttachmentsConfiguration().region(), config.getAwsAttachmentsConfiguration().bucket()), // &line[SecretAccess]
         new AttachmentControllerV3(rateLimiters, gcsAttachmentGenerator),
         new AttachmentControllerV4(rateLimiters, gcsAttachmentGenerator, new TusAttachmentGenerator(config.getTus()), experimentEnrollmentManager),
         new ArchiveController(backupAuthManager, backupManager),
         new CallLinkController(rateLimiters, callingGenericZkSecretParams),
+        // Security: CertificateController is Sink for certificate (needs manual review)
         new CertificateController(new CertificateGenerator(config.getDeliveryCertificate().certificate().value(), config.getDeliveryCertificate().ecPrivateKey(), config.getDeliveryCertificate().expiresDays()), zkAuthOperations, callingGenericZkSecretParams, clock), // &line[SecretAccess]
         new ChallengeController(rateLimitChallengeManager),
+        // Security: DeviceController is Sink for secret config
         new DeviceController(config.getLinkDeviceSecretConfiguration().secret().value(), accountsManager, messagesManager, keys, rateLimiters, // &line[SecretAccess]
             rateLimitersCluster, config.getMaxDevices(), clock),
         new DirectoryV2Controller(directoryV2CredentialsGenerator),
@@ -809,6 +826,7 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
             config.getRemoteConfigConfiguration().globalConfig()),
         new SecureStorageController(storageCredentialsGenerator),
         new SecureValueRecovery2Controller(svr2CredentialsGenerator, accountsManager),
+        // Security: StickerController is Sink for cdn credentials (needs manual review)
         new StickerController(rateLimiters, config.getCdnConfiguration().accessKey().value(), // &line[SecretAccess]
             config.getCdnConfiguration().accessSecret().value(), config.getCdnConfiguration().region(), // &line[SecretAccess]
             config.getCdnConfiguration().bucket()),

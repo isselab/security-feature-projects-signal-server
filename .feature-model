@@ -1,0 +1,6 @@
+SignalServer
+  Authentication
+    Authenticator
+      BaseAccountAuthenticator
+      AccountAuthenticator
+      DisabledPermittedAccountAuthenticator

@@ -24,6 +24,7 @@ import org.whispersystems.textsecuregcm.storage.RefreshingAccountAndDeviceSuppli
 import org.whispersystems.textsecuregcm.util.Pair;
 import org.whispersystems.textsecuregcm.util.Util;
 
+// &begin[BaseAccountAuthenticator]
 public class BaseAccountAuthenticator {
 
   private static final String AUTHENTICATION_COUNTER_NAME = name(BaseAccountAuthenticator.class, "authentication");
@@ -171,3 +172,4 @@ public class BaseAccountAuthenticator {
     return account;
   }
 }
+// &end[BaseAccountAuthenticator]

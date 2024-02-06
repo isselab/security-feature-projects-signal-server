@@ -31,6 +31,10 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+
+import org.gravity.security.annotations.requirements.Critical;
+import org.gravity.security.annotations.requirements.Integrity;
+import org.gravity.security.annotations.requirements.Secrecy;
 import org.signal.libsignal.usernames.BaseUsernameException;
 import org.whispersystems.textsecuregcm.auth.AccountAndAuthenticatedDeviceHolder;
 import org.whispersystems.textsecuregcm.auth.AuthenticatedAccount;
@@ -67,6 +71,7 @@ import org.whispersystems.textsecuregcm.util.HeaderUtils;
 import org.whispersystems.textsecuregcm.util.UsernameHashZkProofVerifier;
 import org.whispersystems.textsecuregcm.util.Util;
 
+@Critical(secrecy = {"TurnTokenGenerator.generate(UUID):TurnToken", "AccountAttributes.recoveryPassword():Optional", "AccountController.registrationRecoveryPasswordsManager:RegistrationRecoveryPasswordsManager"})
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 @Path("/v1/accounts")
 @io.swagger.v3.oas.annotations.tags.Tag(name = "Account")
@@ -78,6 +83,8 @@ public class AccountController {
   private final AccountsManager accounts;
   private final RateLimiters rateLimiters;
   private final TurnTokenGenerator turnTokenGenerator;
+  @Secrecy
+  @Integrity
   private final RegistrationRecoveryPasswordsManager registrationRecoveryPasswordsManager;
   private final UsernameHashZkProofVerifier usernameHashZkProofVerifier;
 
@@ -97,7 +104,8 @@ public class AccountController {
   @GET
   @Path("/turn/")
   @Produces(MediaType.APPLICATION_JSON)
-  public TurnToken getTurnToken(@Auth AuthenticatedAccount auth) throws RateLimitExceededException {
+  @Secrecy
+  public TurnToken getTurnToken(@Auth AuthenticatedAccount auth) throws RateLimitExceededException { // &line[AccountAuthenticator]
     rateLimiters.getTurnLimiter().validate(auth.getAccount().getUuid());
     return turnTokenGenerator.generate(auth.getAccount().getUuid());
   }
@@ -107,7 +115,7 @@ public class AccountController {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   @ChangesDeviceEnabledState
-  public void setGcmRegistrationId(@Auth DisabledPermittedAuthenticatedAccount disabledPermittedAuth,
+  public void setGcmRegistrationId(@Auth DisabledPermittedAuthenticatedAccount disabledPermittedAuth, // &line[DisabledPermittedAccountAuthenticator]
       @NotNull @Valid GcmRegistrationId registrationId) {
 
     final Account account = disabledPermittedAuth.getAccount();
@@ -128,7 +136,7 @@ public class AccountController {
   @DELETE
   @Path("/gcm/")
   @ChangesDeviceEnabledState
-  public void deleteGcmRegistrationId(@Auth DisabledPermittedAuthenticatedAccount disabledPermittedAuth) {
+  public void deleteGcmRegistrationId(@Auth DisabledPermittedAuthenticatedAccount disabledPermittedAuth) { // &line[DisabledPermittedAccountAuthenticator]
     Account account = disabledPermittedAuth.getAccount();
     Device device = disabledPermittedAuth.getAuthenticatedDevice();
 
@@ -144,7 +152,7 @@ public class AccountController {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   @ChangesDeviceEnabledState
-  public void setApnRegistrationId(@Auth DisabledPermittedAuthenticatedAccount disabledPermittedAuth,
+  public void setApnRegistrationId(@Auth DisabledPermittedAuthenticatedAccount disabledPermittedAuth, // &line[DisabledPermittedAccountAuthenticator]
       @NotNull @Valid ApnRegistrationId registrationId) {
 
     final Account account = disabledPermittedAuth.getAccount();
@@ -167,7 +175,7 @@ public class AccountController {
   @DELETE
   @Path("/apn/")
   @ChangesDeviceEnabledState
-  public void deleteApnRegistrationId(@Auth DisabledPermittedAuthenticatedAccount disabledPermittedAuth) {
+  public void deleteApnRegistrationId(@Auth DisabledPermittedAuthenticatedAccount disabledPermittedAuth) { // &line[DisabledPermittedAccountAuthenticator]
     Account account = disabledPermittedAuth.getAccount();
     Device device = disabledPermittedAuth.getAuthenticatedDevice();
 
@@ -186,7 +194,7 @@ public class AccountController {
   @PUT
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/registration_lock")
-  public void setRegistrationLock(@Auth AuthenticatedAccount auth, @NotNull @Valid RegistrationLock accountLock) {
+  public void setRegistrationLock(@Auth AuthenticatedAccount auth, @NotNull @Valid RegistrationLock accountLock) { // &line[AccountAuthenticator]
     SaltedTokenHash credentials = SaltedTokenHash.generateFor(accountLock.getRegistrationLock());
 
     accounts.update(auth.getAccount(),
@@ -195,13 +203,13 @@ public class AccountController {
 
   @DELETE
   @Path("/registration_lock")
-  public void removeRegistrationLock(@Auth AuthenticatedAccount auth) {
+  public void removeRegistrationLock(@Auth AuthenticatedAccount auth) { // &line[AccountAuthenticator]
     accounts.update(auth.getAccount(), a -> a.setRegistrationLock(null, null));
   }
 
   @PUT
   @Path("/name/")
-  public void setName(@Auth DisabledPermittedAuthenticatedAccount disabledPermittedAuth, @NotNull @Valid DeviceName deviceName) {
+  public void setName(@Auth DisabledPermittedAuthenticatedAccount disabledPermittedAuth, @NotNull @Valid DeviceName deviceName) { // &line[DisabledPermittedAccountAuthenticator]
     Account account = disabledPermittedAuth.getAccount();
     Device device = disabledPermittedAuth.getAuthenticatedDevice();
     accounts.updateDevice(account, device.getId(), d -> d.setName(deviceName.getDeviceName()));
@@ -213,7 +221,7 @@ public class AccountController {
   @Produces(MediaType.APPLICATION_JSON)
   @ChangesDeviceEnabledState
   public void setAccountAttributes(
-      @Auth DisabledPermittedAuthenticatedAccount disabledPermittedAuth,
+      @Auth DisabledPermittedAuthenticatedAccount disabledPermittedAuth, // &line[DisabledPermittedAccountAuthenticator]
       @HeaderParam(HeaderUtils.X_SIGNAL_AGENT) String userAgent,
       @NotNull @Valid AccountAttributes attributes) {
     final Account account = disabledPermittedAuth.getAccount();
@@ -244,14 +252,14 @@ public class AccountController {
   @GET
   @Path("/me")
   @Produces(MediaType.APPLICATION_JSON)
-  public AccountIdentityResponse getMe(@Auth DisabledPermittedAuthenticatedAccount auth) {
+  public AccountIdentityResponse getMe(@Auth DisabledPermittedAuthenticatedAccount auth) { // &line[DisabledPermittedAccountAuthenticator]
     return buildAccountIdentityResponse(auth);
   }
 
   @GET
   @Path("/whoami")
   @Produces(MediaType.APPLICATION_JSON)
-  public AccountIdentityResponse whoAmI(@Auth AuthenticatedAccount auth) {
+  public AccountIdentityResponse whoAmI(@Auth AuthenticatedAccount auth) { // &line[AccountAuthenticator]
     return buildAccountIdentityResponse(auth);
   }
 
@@ -274,7 +282,7 @@ public class AccountController {
   )
   @ApiResponse(responseCode = "204", description = "Username successfully deleted.", useReturnTypeSchema = true)
   @ApiResponse(responseCode = "401", description = "Account authentication check failed.")
-  public CompletableFuture<Void> deleteUsernameHash(@Auth final AuthenticatedAccount auth) {
+  public CompletableFuture<Void> deleteUsernameHash(@Auth final AuthenticatedAccount auth) { // &line[AccountAuthenticator]
     return accounts.clearUsernameHash(auth.getAccount())
         .thenRun(Util.NOOP);
   }
@@ -296,7 +304,7 @@ public class AccountController {
   @ApiResponse(responseCode = "422", description = "Invalid request format.")
   @ApiResponse(responseCode = "429", description = "Ratelimited.")
   public CompletableFuture<ReserveUsernameHashResponse> reserveUsernameHash(
-      @Auth final AuthenticatedAccount auth,
+      @Auth final AuthenticatedAccount auth, // &line[AccountAuthenticator]
       @NotNull @Valid final ReserveUsernameHashRequest usernameRequest) throws RateLimitExceededException {
 
     rateLimiters.getUsernameReserveLimiter().validate(auth.getAccount().getUuid());
@@ -336,7 +344,7 @@ public class AccountController {
   @ApiResponse(responseCode = "422", description = "Invalid request format.")
   @ApiResponse(responseCode = "429", description = "Ratelimited.")
   public CompletableFuture<UsernameHashResponse> confirmUsernameHash(
-      @Auth final AuthenticatedAccount auth,
+      @Auth final AuthenticatedAccount auth, // &line[AccountAuthenticator]
       @NotNull @Valid final ConfirmUsernameHashRequest confirmRequest) {
 
     try {
@@ -421,7 +429,7 @@ public class AccountController {
   @ApiResponse(responseCode = "422", description = "Invalid request format.")
   @ApiResponse(responseCode = "429", description = "Ratelimited.")
   public UsernameLinkHandle updateUsernameLink(
-      @Auth final AuthenticatedAccount auth,
+      @Auth final AuthenticatedAccount auth, // &line[AccountAuthenticator]
       @NotNull @Valid final EncryptedUsername encryptedUsername) throws RateLimitExceededException {
     // check ratelimiter for username link operations
     rateLimiters.forDescriptor(RateLimiters.For.USERNAME_LINK_OPERATION).validate(auth.getAccount().getUuid());
@@ -448,7 +456,7 @@ public class AccountController {
   @ApiResponse(responseCode = "204", description = "Username Link successfully deleted.", useReturnTypeSchema = true)
   @ApiResponse(responseCode = "401", description = "Account authentication check failed.")
   @ApiResponse(responseCode = "429", description = "Ratelimited.")
-  public void deleteUsernameLink(@Auth final AuthenticatedAccount auth) throws RateLimitExceededException {
+  public void deleteUsernameLink(@Auth final AuthenticatedAccount auth) throws RateLimitExceededException { // &line[AccountAuthenticator]
     // check ratelimiter for username link operations
     rateLimiters.forDescriptor(RateLimiters.For.USERNAME_LINK_OPERATION).validate(auth.getAccount().getUuid());
     clearUsernameLink(auth.getAccount());
@@ -497,7 +505,7 @@ public class AccountController {
   @Path("/account/{identifier}")
   @RateLimitedByIp(RateLimiters.For.CHECK_ACCOUNT_EXISTENCE)
   public Response accountExists(
-      @Auth final Optional<AuthenticatedAccount> authenticatedAccount,
+      @Auth final Optional<AuthenticatedAccount> authenticatedAccount, // &line[AccountAuthenticator]
 
       @Parameter(description = "An ACI or PNI account identifier to check")
       @PathParam("identifier") final ServiceIdentifier accountIdentifier) {
@@ -512,7 +520,7 @@ public class AccountController {
 
   @DELETE
   @Path("/me")
-  public CompletableFuture<Void> deleteAccount(@Auth DisabledPermittedAuthenticatedAccount auth) throws InterruptedException {
+  public CompletableFuture<Void> deleteAccount(@Auth DisabledPermittedAuthenticatedAccount auth) throws InterruptedException { // &line[DisabledPermittedAccountAuthenticator]
     return accounts.delete(auth.getAccount(), AccountsManager.DeletionReason.USER_REQUEST);
   }
 

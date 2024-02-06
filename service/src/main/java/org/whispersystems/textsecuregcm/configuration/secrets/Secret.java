@@ -8,7 +8,7 @@ package org.whispersystems.textsecuregcm.configuration.secrets;
 import org.gravity.security.annotations.requirements.Critical;
 import org.gravity.security.annotations.requirements.Secrecy;
 
-@Critical(secrecy = "Secret.value:T")
+@Critical(secrecy = "Secret.value:Object")
 public class Secret<T> {
 
   @Secrecy
@@ -24,6 +24,7 @@ public class Secret<T> {
     return value;
   }
 
+  // Security feature!
   @Override
   public String toString() {
     return "[REDACTED]";

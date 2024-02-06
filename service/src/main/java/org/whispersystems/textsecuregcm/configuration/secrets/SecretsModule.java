@@ -18,7 +18,7 @@ import java.util.function.BiFunction;
 
 import org.gravity.security.annotations.requirements.Critical;
 
-@Critical(secrecy = {"SecretStore.secretStringList(String):SecretStringList", "SecretStore.secretString(String):SecretString"})
+@Critical(secrecy = {"SecretStore.secretStringList(String):SecretStringList", "SecretStore.secretString(String):SecretString", "SecretStore.secretBytesFromBase64String(String):SecretBytes"})
 public class SecretsModule extends SimpleModule {
 
   public static final SecretsModule INSTANCE = new SecretsModule();

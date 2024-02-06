@@ -9,8 +9,13 @@ import java.util.Base64;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
+import org.gravity.security.annotations.requirements.Critical;
+import org.gravity.security.annotations.requirements.Secrecy;
+
+@Critical(secrecy = {"Anonymous.unidentifiedSenderAccessKey:byte[]"})
 public class Anonymous {
 
+  @Secrecy
   private final byte[] unidentifiedSenderAccessKey;
 
   public Anonymous(String header) {
@@ -21,6 +26,7 @@ public class Anonymous {
     }
   }
 
+  @Secrecy
   public byte[] getAccessKey() {
     return unidentifiedSenderAccessKey;
   }

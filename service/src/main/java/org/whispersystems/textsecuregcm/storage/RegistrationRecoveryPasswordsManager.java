@@ -11,6 +11,8 @@ import java.lang.invoke.MethodHandles;
 import java.util.HexFormat;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+
+import org.gravity.security.annotations.requirements.Integrity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.whispersystems.textsecuregcm.auth.SaltedTokenHash;
@@ -27,6 +29,7 @@ public class RegistrationRecoveryPasswordsManager {
     this.registrationRecoveryPasswords = requireNonNull(registrationRecoveryPasswords);
   }
 
+  // Security Feature: Password Verification
   public CompletableFuture<Boolean> verify(final String number, final byte[] password) {
     return registrationRecoveryPasswords.lookup(number)
         .thenApply(maybeHash -> maybeHash.filter(hash -> hash.verify(bytesToString(password))))
@@ -38,6 +41,7 @@ public class RegistrationRecoveryPasswordsManager {
         .thenApply(Optional::isPresent);
   }
 
+  @Integrity
   public CompletableFuture<Void> storeForCurrentNumber(final String number, final byte[] password) {
     final String token = bytesToString(password);
     final SaltedTokenHash tokenHash = SaltedTokenHash.generateFor(token);

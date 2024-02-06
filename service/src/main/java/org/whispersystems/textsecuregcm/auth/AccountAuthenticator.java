@@ -10,6 +10,7 @@ import java.util.Optional;
 import org.whispersystems.textsecuregcm.experiment.ExperimentEnrollmentManager;
 import org.whispersystems.textsecuregcm.storage.AccountsManager;
 
+// &begin[AccountAuthenticator]
 public class AccountAuthenticator extends BaseAccountAuthenticator implements
     Authenticator<BasicCredentials, AuthenticatedAccount> {
 
@@ -23,3 +24,4 @@ public class AccountAuthenticator extends BaseAccountAuthenticator implements
   }
 
 }
+// &end[AccountAuthenticator]

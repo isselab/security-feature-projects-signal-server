@@ -27,8 +27,10 @@ public class ExternalServiceCredentialsGenerator {
 
   private static final int TRUNCATED_SIGNATURE_LENGTH = 10;
 
+  @Secrecy
   private final byte[] key;
 
+  @Secrecy
   private final byte[] userDerivationKey;
 
   private final boolean prependUsername;
@@ -81,6 +83,7 @@ public class ExternalServiceCredentialsGenerator {
    * @param uuid identity to generate credentials for
    * @return an instance of {@link ExternalServiceCredentials}
    */
+  @Secrecy
   public ExternalServiceCredentials generateForUuid(final UUID uuid) {
     return generateFor(uuid.toString());
   }
@@ -90,6 +93,7 @@ public class ExternalServiceCredentialsGenerator {
    * @param identity identity string to generate credentials for
    * @return an instance of {@link ExternalServiceCredentials}
    */
+  @Secrecy
   public ExternalServiceCredentials generateFor(final String identity) {
     if (usernameIsTimestamp()) {
       throw new RuntimeException("Configured to use timestamp as username");
@@ -102,6 +106,7 @@ public class ExternalServiceCredentialsGenerator {
    * Generates `ExternalServiceCredentials` using a prefix concatenated with a truncated timestamp as the username, following this generator's configuration.
    * @return an instance of {@link ExternalServiceCredentials}
    */
+  @Secrecy
   public ExternalServiceCredentials generateWithTimestampAsUsername() {
     if (!usernameIsTimestamp()) {
       throw new RuntimeException("Not configured to use timestamp as username");
@@ -111,6 +116,7 @@ public class ExternalServiceCredentialsGenerator {
     return generate(usernameTimestampPrefix + DELIMITER + truncatedTimestampSeconds);
   }
 
+  @Secrecy
   private ExternalServiceCredentials generate(final String identity) {
     final String username = shouldDeriveUsername()
         ? hmac256TruncatedToHexString(userDerivationKey, identity, derivedUsernameTruncateLength)
@@ -228,6 +234,7 @@ public class ExternalServiceCredentialsGenerator {
 
   public static class Builder {
 
+	@Secrecy
     private final byte[] key;
 
     @Secrecy

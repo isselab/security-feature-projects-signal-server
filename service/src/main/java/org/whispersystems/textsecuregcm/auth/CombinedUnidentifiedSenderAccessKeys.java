@@ -10,7 +10,10 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.gravity.security.annotations.requirements.Secrecy;
+
 public class CombinedUnidentifiedSenderAccessKeys {
+  @Secrecy
   private final byte[] combinedUnidentifiedSenderAccessKeys;
 
   public CombinedUnidentifiedSenderAccessKeys(String header) {
@@ -24,6 +27,7 @@ public class CombinedUnidentifiedSenderAccessKeys {
     }
   }
 
+  @Secrecy
   public byte[] getAccessKeys() {
     return combinedUnidentifiedSenderAccessKeys;
   }

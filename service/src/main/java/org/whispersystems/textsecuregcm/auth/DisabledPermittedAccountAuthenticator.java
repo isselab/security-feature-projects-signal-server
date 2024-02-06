@@ -11,6 +11,7 @@ import java.util.Optional;
 import org.whispersystems.textsecuregcm.experiment.ExperimentEnrollmentManager;
 import org.whispersystems.textsecuregcm.storage.AccountsManager;
 
+// &begin[DisabledPermittedAccountAuthenticator]
 public class DisabledPermittedAccountAuthenticator extends BaseAccountAuthenticator implements
     Authenticator<BasicCredentials, DisabledPermittedAuthenticatedAccount> {
 
@@ -24,3 +25,4 @@ public class DisabledPermittedAccountAuthenticator extends BaseAccountAuthentica
     return account.map(DisabledPermittedAuthenticatedAccount::new);
   }
 }
+// &end[DisabledPermittedAccountAuthenticator]

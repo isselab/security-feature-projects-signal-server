@@ -14,9 +14,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.gravity.security.annotations.requirements.Critical;
 import org.gravity.security.annotations.requirements.Secrecy;
 import org.whispersystems.textsecuregcm.util.SystemMapper;
 
+@Critical(secrecy = {"SecretStore.secrets:Map", "SecretStore.fromStore(String,Class):Secret", "Secret.value():Object", "SecretStore.secretStringList(String):SecretStringList"})
 public class SecretStore {
 
   @Secrecy

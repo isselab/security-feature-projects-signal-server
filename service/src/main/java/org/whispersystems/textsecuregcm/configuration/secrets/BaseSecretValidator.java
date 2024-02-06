@@ -13,7 +13,8 @@ import javax.validation.ConstraintValidatorContext;
 
 import org.gravity.security.annotations.requirements.Critical;
 
-@Critical(secrecy = "Secret.value():T")
+// Security Feature: Validators on secret values
+@Critical(secrecy = "Secret.value():Object")
 public abstract class BaseSecretValidator<A extends Annotation, T, S extends Secret<? extends T>> implements ConstraintValidator<A, S> {
 
   private final ConstraintValidator<A, T> validator;

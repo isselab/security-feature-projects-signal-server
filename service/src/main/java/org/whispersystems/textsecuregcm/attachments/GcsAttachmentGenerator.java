@@ -5,6 +5,7 @@
 
 package org.whispersystems.textsecuregcm.attachments;
 
+import org.gravity.security.annotations.requirements.Secrecy;
 import org.whispersystems.textsecuregcm.gcp.CanonicalRequest;
 import org.whispersystems.textsecuregcm.gcp.CanonicalRequestGenerator;
 import org.whispersystems.textsecuregcm.gcp.CanonicalRequestSigner;
@@ -37,6 +38,7 @@ public class GcsAttachmentGenerator implements AttachmentGenerator {
     return new Descriptor(getHeaderMap(canonicalRequest), getSignedUploadLocation(canonicalRequest));
   }
 
+  @Secrecy
   private String getSignedUploadLocation(@Nonnull CanonicalRequest canonicalRequest) {
     return "https://" + canonicalRequest.getDomain() + canonicalRequest.getResourcePath()
         + '?' + canonicalRequest.getCanonicalQuery()

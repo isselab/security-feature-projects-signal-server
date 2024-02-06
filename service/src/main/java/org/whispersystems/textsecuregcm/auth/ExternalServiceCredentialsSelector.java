@@ -11,11 +11,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.gravity.security.annotations.requirements.Secrecy;
+
 public class ExternalServiceCredentialsSelector {
 
   private ExternalServiceCredentialsSelector() {}
 
-  public record CredentialInfo(String token, boolean valid, ExternalServiceCredentials credentials, long timestamp) {
+  public record CredentialInfo(@Secrecy String token, boolean valid, @Secrecy ExternalServiceCredentials credentials, long timestamp) {
     /**
      * @return a copy of this record with valid=false
      */

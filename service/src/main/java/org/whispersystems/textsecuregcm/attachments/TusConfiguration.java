@@ -8,8 +8,9 @@ package org.whispersystems.textsecuregcm.attachments;
 import org.whispersystems.textsecuregcm.configuration.secrets.SecretBytes;
 import org.whispersystems.textsecuregcm.util.ExactlySize;
 import javax.validation.constraints.NotEmpty;
+import org.gravity.security.annotations.requirements.Secrecy;
 
 public record TusConfiguration(
-  @ExactlySize(32) SecretBytes userAuthenticationTokenSharedSecret,
+  @Secrecy @ExactlySize(32) SecretBytes userAuthenticationTokenSharedSecret,
   @NotEmpty String uploadUri
 ){}

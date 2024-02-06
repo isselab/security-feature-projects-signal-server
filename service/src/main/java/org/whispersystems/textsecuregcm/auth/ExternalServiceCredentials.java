@@ -6,8 +6,9 @@
 package org.whispersystems.textsecuregcm.auth;
 
 import org.gravity.security.annotations.requirements.Critical;
+import org.gravity.security.annotations.requirements.Secrecy;
 
 @Critical(secrecy = "password:String")
-public record ExternalServiceCredentials(String username, String password) {
+public record ExternalServiceCredentials(String username, @Secrecy String password) {
 
 }

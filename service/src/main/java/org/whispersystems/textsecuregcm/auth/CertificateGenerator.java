@@ -9,6 +9,9 @@ import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 import java.security.InvalidKeyException;
 import java.util.concurrent.TimeUnit;
+
+import org.gravity.security.annotations.requirements.Integrity;
+import org.gravity.security.annotations.requirements.Secrecy;
 import org.signal.libsignal.protocol.ecc.Curve;
 import org.signal.libsignal.protocol.ecc.ECPrivateKey;
 import org.whispersystems.textsecuregcm.entities.MessageProtos.SenderCertificate;
@@ -19,6 +22,7 @@ import org.whispersystems.textsecuregcm.storage.Device;
 
 public class CertificateGenerator {
 
+  @Secrecy
   private final ECPrivateKey      privateKey;
   private final int               expiresDays;
   private final ServerCertificate serverCertificate;

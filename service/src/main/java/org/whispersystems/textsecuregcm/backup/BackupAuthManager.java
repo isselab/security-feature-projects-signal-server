@@ -40,7 +40,7 @@ import org.whispersystems.textsecuregcm.util.Util;
  * can use {@link #getBackupAuthCredentials} to retrieve credentials that can subsequently be used to make anonymously
  * authenticated requests against their backup-id.
  */
-@Critical(secrecy = "BackupAuthManager.serverSecretParams:org.signal.libsignal.zkgroup.GenericServerSecretParams")
+@Critical(secrecy = {"BackupAuthManager.serverSecretParams:org.signal.libsignal.zkgroup.GenericServerSecretParams"})
 public class BackupAuthManager {
 
   private static final Duration MAX_REDEMPTION_DURATION = Duration.ofDays(7);

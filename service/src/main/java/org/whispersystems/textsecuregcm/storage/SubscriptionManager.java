@@ -23,6 +23,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.core.Response;
+
+import org.gravity.security.annotations.requirements.Secrecy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.whispersystems.textsecuregcm.subscriptions.ProcessorCustomer;
@@ -60,6 +62,7 @@ public class SubscriptionManager {
   public static class Record {
 
     public final byte[] user;
+    @Secrecy
     public final byte[] password;
     public final Instant createdAt;
     @VisibleForTesting

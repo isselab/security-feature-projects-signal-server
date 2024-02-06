@@ -49,7 +49,7 @@ public class SecretStore {
   @Secrecy
   public SecretBytes secretBytesFromBase64String(final String reference) {
     final SecretString secret = fromStore(reference, SecretString.class);
-    return new SecretBytes(decodeBase64(secret.value()));
+    return new SecretBytes(decodeBase64(secret.value())); // &line[SecretAccess]
   }
 
   @Secrecy
@@ -59,7 +59,7 @@ public class SecretStore {
 
   @Secrecy
   public SecretBytesList secretBytesListFromBase64Strings(final String reference) {
-    final List<String> secrets = secretStringList(reference).value();
+    final List<String> secrets = secretStringList(reference).value(); // &line[SecretAccess]
     final List<byte[]> byteSecrets = secrets.stream().map(SecretStore::decodeBase64).toList();
     return new SecretBytesList(byteSecrets);
   }

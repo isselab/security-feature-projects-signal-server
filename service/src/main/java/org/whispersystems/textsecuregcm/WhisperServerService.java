@@ -468,10 +468,10 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
         config.getAdminEventLoggingConfiguration().projectId(),
         config.getAdminEventLoggingConfiguration().logName());
 
-    StripeManager stripeManager = new StripeManager(config.getStripe().apiKey().value(), subscriptionProcessorExecutor,
-        config.getStripe().idempotencyKeyGenerator().value(), config.getStripe().boostDescription(), config.getStripe().supportedCurrenciesByPaymentMethod());
+    StripeManager stripeManager = new StripeManager(config.getStripe().apiKey().value(), subscriptionProcessorExecutor, // &line[SecretAccess]
+        config.getStripe().idempotencyKeyGenerator().value(), config.getStripe().boostDescription(), config.getStripe().supportedCurrenciesByPaymentMethod()); // &line[SecretAccess]
     BraintreeManager braintreeManager = new BraintreeManager(config.getBraintree().merchantId(),
-        config.getBraintree().publicKey(), config.getBraintree().privateKey().value(),
+        config.getBraintree().publicKey(), config.getBraintree().privateKey().value(), // &line[SecretAccess]
         config.getBraintree().environment(),
         config.getBraintree().supportedCurrenciesByPaymentMethod(), config.getBraintree().merchantAccounts(),
         config.getBraintree().graphqlUrl(), config.getBraintree().circuitBreaker(), subscriptionProcessorExecutor,
@@ -530,7 +530,7 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
         experimentEnrollmentManager, registrationRecoveryPasswordsManager, accountLockExecutor, clock);
     RemoteConfigsManager remoteConfigsManager = new RemoteConfigsManager(remoteConfigs);
     APNSender apnSender = new APNSender(apnSenderExecutor, config.getApnConfiguration());
-    FcmSender fcmSender = new FcmSender(fcmSenderExecutor, config.getFcmConfiguration().credentials().value());
+    FcmSender fcmSender = new FcmSender(fcmSenderExecutor, config.getFcmConfiguration().credentials().value()); // &line[SecretAccess]
     ApnPushNotificationScheduler apnPushNotificationScheduler = new ApnPushNotificationScheduler(pushSchedulerCluster,
         apnSender, accountsManager, 0);
     PushNotificationManager pushNotificationManager = new PushNotificationManager(accountsManager, apnSender, fcmSender,
@@ -570,7 +570,7 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
         pushLatencyManager);
     final ReceiptSender receiptSender = new ReceiptSender(accountsManager, messageSender, receiptSenderExecutor);
     final TurnTokenGenerator turnTokenGenerator = new TurnTokenGenerator(dynamicConfigurationManager,
-        config.getTurnSecretConfiguration().secret().value());
+        config.getTurnSecretConfiguration().secret().value()); // &line[SecretAccess]
 
     final CardinalityEstimator messageByteLimitCardinalityEstimator = new CardinalityEstimator(
         rateLimitersCluster,
@@ -582,7 +582,7 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
         config.getRecaptchaConfiguration().credentialConfigurationJson(),
         dynamicConfigurationManager);
     HCaptchaClient hCaptchaClient = new HCaptchaClient(
-        config.getHCaptchaConfiguration().getApiKey().value(),
+        config.getHCaptchaConfiguration().getApiKey().value(), // &line[SecretAccess]
         hcaptchaRetryExecutor,
         config.getHCaptchaConfiguration().getCircuitBreaker(),
         config.getHCaptchaConfiguration().getRetry(),
@@ -600,8 +600,8 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
     ChangeNumberManager changeNumberManager = new ChangeNumberManager(messageSender, accountsManager);
 
     HttpClient currencyClient = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).connectTimeout(Duration.ofSeconds(10)).build();
-    FixerClient fixerClient = new FixerClient(currencyClient, config.getPaymentsServiceConfiguration().fixerApiKey().value());
-    CoinMarketCapClient coinMarketCapClient = new CoinMarketCapClient(currencyClient, config.getPaymentsServiceConfiguration().coinMarketCapApiKey().value(), config.getPaymentsServiceConfiguration().coinMarketCapCurrencyIds());
+    FixerClient fixerClient = new FixerClient(currencyClient, config.getPaymentsServiceConfiguration().fixerApiKey().value()); // &line[SecretAccess]
+    CoinMarketCapClient coinMarketCapClient = new CoinMarketCapClient(currencyClient, config.getPaymentsServiceConfiguration().coinMarketCapApiKey().value(), config.getPaymentsServiceConfiguration().coinMarketCapCurrencyIds()); // &line[SecretAccess]
     CurrencyConversionManager currencyManager = new CurrencyConversionManager(fixerClient, coinMarketCapClient,
         cacheCluster, config.getPaymentsServiceConfiguration().paymentCurrencies(), recurringJobExecutor, Clock.systemUTC());
 
@@ -619,8 +619,8 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
 
     StaticCredentialsProvider cdnCredentialsProvider = StaticCredentialsProvider
         .create(AwsBasicCredentials.create(
-            config.getCdnConfiguration().accessKey().value(),
-            config.getCdnConfiguration().accessSecret().value()));
+            config.getCdnConfiguration().accessKey().value(), // &line[SecretAccess]
+            config.getCdnConfiguration().accessSecret().value())); // &line[SecretAccess]
     S3Client cdnS3Client = S3Client.builder()
         .credentialsProvider(cdnCredentialsProvider)
         .region(Region.of(config.getCdnConfiguration().region()))
@@ -635,16 +635,16 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
         config.getGcpAttachmentsConfiguration().email(),
         config.getGcpAttachmentsConfiguration().maxSizeInBytes(),
         config.getGcpAttachmentsConfiguration().pathPrefix(),
-        config.getGcpAttachmentsConfiguration().rsaSigningKey().value());
+        config.getGcpAttachmentsConfiguration().rsaSigningKey().value()); // &line[SecretAccess]
 
     PostPolicyGenerator profileCdnPolicyGenerator = new PostPolicyGenerator(config.getCdnConfiguration().region(),
-        config.getCdnConfiguration().bucket(), config.getCdnConfiguration().accessKey().value());
-    PolicySigner profileCdnPolicySigner = new PolicySigner(config.getCdnConfiguration().accessSecret().value(),
+        config.getCdnConfiguration().bucket(), config.getCdnConfiguration().accessKey().value()); // &line[SecretAccess]
+    PolicySigner profileCdnPolicySigner = new PolicySigner(config.getCdnConfiguration().accessSecret().value(), // &line[SecretAccess]
         config.getCdnConfiguration().region());
 
-    ServerSecretParams zkSecretParams = new ServerSecretParams(config.getZkConfig().serverSecret().value());
-    GenericServerSecretParams callingGenericZkSecretParams = new GenericServerSecretParams(config.getCallingZkConfig().serverSecret().value());
-    GenericServerSecretParams backupsGenericZkSecretParams = new GenericServerSecretParams(config.getBackupsZkConfig().serverSecret().value());
+    ServerSecretParams zkSecretParams = new ServerSecretParams(config.getZkConfig().serverSecret().value()); // &line[SecretAccess]
+    GenericServerSecretParams callingGenericZkSecretParams = new GenericServerSecretParams(config.getCallingZkConfig().serverSecret().value()); // &line[SecretAccess]
+    GenericServerSecretParams backupsGenericZkSecretParams = new GenericServerSecretParams(config.getBackupsZkConfig().serverSecret().value()); // &line[SecretAccess]
     ServerZkProfileOperations zkProfileOperations = new ServerZkProfileOperations(zkSecretParams);
     ServerZkAuthOperations zkAuthOperations = new ServerZkAuthOperations(zkSecretParams);
     ServerZkReceiptOperations zkReceiptOperations = new ServerZkReceiptOperations(zkSecretParams);
@@ -776,14 +776,14 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
         new AccountControllerV2(accountsManager, changeNumberManager, phoneVerificationTokenManager,
             registrationLockVerificationManager, rateLimiters),
         new ArtController(rateLimiters, artCredentialsGenerator),
-        new AttachmentControllerV2(rateLimiters, config.getAwsAttachmentsConfiguration().accessKey().value(), config.getAwsAttachmentsConfiguration().accessSecret().value(), config.getAwsAttachmentsConfiguration().region(), config.getAwsAttachmentsConfiguration().bucket()),
+        new AttachmentControllerV2(rateLimiters, config.getAwsAttachmentsConfiguration().accessKey().value(), config.getAwsAttachmentsConfiguration().accessSecret().value(), config.getAwsAttachmentsConfiguration().region(), config.getAwsAttachmentsConfiguration().bucket()), // &line[SecretAccess]
         new AttachmentControllerV3(rateLimiters, gcsAttachmentGenerator),
         new AttachmentControllerV4(rateLimiters, gcsAttachmentGenerator, new TusAttachmentGenerator(config.getTus()), experimentEnrollmentManager),
         new ArchiveController(backupAuthManager, backupManager),
         new CallLinkController(rateLimiters, callingGenericZkSecretParams),
-        new CertificateController(new CertificateGenerator(config.getDeliveryCertificate().certificate().value(), config.getDeliveryCertificate().ecPrivateKey(), config.getDeliveryCertificate().expiresDays()), zkAuthOperations, callingGenericZkSecretParams, clock),
+        new CertificateController(new CertificateGenerator(config.getDeliveryCertificate().certificate().value(), config.getDeliveryCertificate().ecPrivateKey(), config.getDeliveryCertificate().expiresDays()), zkAuthOperations, callingGenericZkSecretParams, clock), // &line[SecretAccess]
         new ChallengeController(rateLimitChallengeManager),
-        new DeviceController(config.getLinkDeviceSecretConfiguration().secret().value(), accountsManager, messagesManager, keys, rateLimiters,
+        new DeviceController(config.getLinkDeviceSecretConfiguration().secret().value(), accountsManager, messagesManager, keys, rateLimiters, // &line[SecretAccess]
             rateLimitersCluster, config.getMaxDevices(), clock),
         new DirectoryV2Controller(directoryV2CredentialsGenerator),
         new DonationController(clock, zkReceiptOperations, redeemedReceiptsManager, accountsManager, config.getBadges(),
@@ -807,8 +807,8 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
             config.getRemoteConfigConfiguration().globalConfig()),
         new SecureStorageController(storageCredentialsGenerator),
         new SecureValueRecovery2Controller(svr2CredentialsGenerator, accountsManager),
-        new StickerController(rateLimiters, config.getCdnConfiguration().accessKey().value(),
-            config.getCdnConfiguration().accessSecret().value(), config.getCdnConfiguration().region(),
+        new StickerController(rateLimiters, config.getCdnConfiguration().accessKey().value(), // &line[SecretAccess]
+            config.getCdnConfiguration().accessSecret().value(), config.getCdnConfiguration().region(), // &line[SecretAccess]
             config.getCdnConfiguration().bucket()),
         new VerificationController(registrationServiceClient, new VerificationSessionManager(verificationSessions),
             pushNotificationManager, registrationCaptchaManager, registrationRecoveryPasswordsManager, rateLimiters,

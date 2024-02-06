@@ -19,14 +19,17 @@ public class Secret<T> {
     this.value = value;
   }
 
+  // &begin[SecretAccess]
   @Secrecy
   public T value() {
     return value;
   }
+  // &end[SecretAccess]
 
-  // Security feature!
+  // &begin[SecretRedaction]
   @Override
   public String toString() {
     return "[REDACTED]";
   }
+  // &end[SecretRedaction]
 }

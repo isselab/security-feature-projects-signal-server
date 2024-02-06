@@ -21,6 +21,6 @@ public record UnidentifiedDeliveryConfiguration(@Secrecy @NotNull SecretBytes ce
   // Leaving Scope
   @Secrecy
   public ECPrivateKey ecPrivateKey() throws InvalidKeyException {
-    return Curve.decodePrivatePoint(privateKey.value());
+    return Curve.decodePrivatePoint(privateKey.value()); // &line[SecretAccess]
   }
 }

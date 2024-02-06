@@ -51,7 +51,7 @@ enum ExternalServiceDefinitions {
     final SecureValueRecovery2Configuration cfg = chatConfig.getSvr2Configuration();
     return ExternalServiceCredentialsGenerator
         .builder(cfg.userAuthenticationTokenSharedSecret())
-        .withUserDerivationKey(cfg.userIdTokenSharedSecret().value())
+        .withUserDerivationKey(cfg.userIdTokenSharedSecret().value()) // &line[SecretAccess]
         .prependUsername(false)
         .withDerivedUsernameTruncateLength(16)
         .withClock(clock)

@@ -8,4 +8,8 @@ SignalServer
       PhoneVerification
       RecoveryPasswordVerification
       SessionVerification
+  Secrets
+    SecretRedaction
+    SecretAccess
+    SecretValidation
 

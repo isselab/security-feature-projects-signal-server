@@ -63,8 +63,8 @@ public class APNSender implements Managed, PushNotificationSender {
     this.executor = executor;
     this.bundleId = configuration.bundleId();
     this.apnsClient = new ApnsClientBuilder().setSigningKey(
-            ApnsSigningKey.loadFromInputStream(new ByteArrayInputStream(configuration.signingKey().value().getBytes()),
-                configuration.teamId().value(), configuration.keyId().value()))
+            ApnsSigningKey.loadFromInputStream(new ByteArrayInputStream(configuration.signingKey().value().getBytes()), // &line[SecretAccess]
+                configuration.teamId().value(), configuration.keyId().value())) // &line[SecretAccess]
         .setTrustedServerCertificateChain(getClass().getResourceAsStream(APNS_CA_FILENAME))
         .setApnsServer(configuration.sandbox() ? ApnsClientBuilder.DEVELOPMENT_APNS_HOST : ApnsClientBuilder.PRODUCTION_APNS_HOST)
         .build();

@@ -47,7 +47,7 @@ public class ExternalServiceCredentialsGenerator {
 
 
   public static ExternalServiceCredentialsGenerator.Builder builder(final SecretBytes key) {
-    return builder(key.value());
+    return builder(key.value()); // &secrecy[SecretAccess]
   }
 
   @VisibleForTesting
@@ -258,7 +258,7 @@ public class ExternalServiceCredentialsGenerator {
     }
 
     public Builder withUserDerivationKey(final SecretBytes userDerivationKey) {
-      return withUserDerivationKey(userDerivationKey.value());
+      return withUserDerivationKey(userDerivationKey.value()); // &line[SecretAccess]
     }
 
     public Builder withUserDerivationKey(final byte[] userDerivationKey) {

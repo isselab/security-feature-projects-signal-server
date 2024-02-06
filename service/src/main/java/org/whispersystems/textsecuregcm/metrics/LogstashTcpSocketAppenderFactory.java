@@ -108,7 +108,8 @@ public class LogstashTcpSocketAppenderFactory extends AbstractAppenderFactory<IL
     encoder.setCustomFields(customFieldsNode.toString());
     final LayoutWrappingEncoder<ILoggingEvent> prefix = new LayoutWrappingEncoder<>();
     final PatternLayout layout = new PatternLayout();
-    layout.setPattern(String.format("%s ", apiKey.value()));
+    // Security: Leaking API Key via Logging
+    layout.setPattern(String.format("%s ", apiKey.value())); // &line[SecretAccess]
     prefix.setLayout(layout);
     encoder.setPrefix(prefix);
     appender.setEncoder(encoder);

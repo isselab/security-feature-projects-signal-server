@@ -726,6 +726,7 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
 
     environment.jersey().register(new KeysController(rateLimiters, keys, accountsManager));
 
+    // &begin[AntiSpam]
     boolean registeredSpamFilter = false;
     ReportSpamTokenProvider reportSpamTokenProvider = null;
 
@@ -771,6 +772,7 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
       log.warn("No spam-reporting token providers found; using default (no-op) provider as a default");
       reportSpamTokenProvider = ReportSpamTokenProvider.noop();
     }
+    // &end[AntiSpam]
 
     final List<Object> commonControllers = Lists.newArrayList(
         new AccountControllerV2(accountsManager, changeNumberManager, phoneVerificationTokenManager,

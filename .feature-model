@@ -16,6 +16,8 @@ SignalServer
     Captcha
       HCaptcha
       Recaptcha
+  AntiSpam
+    SpamFilter
   Policies
     CORS
 

@@ -212,8 +212,10 @@ public class VerificationController {
       verificationSession = handlePushChallenge(updateVerificationSessionRequest, registrationServiceSession,
           verificationSession);
 
+      // &begin[Captcha]
       verificationSession = handleCaptcha(sourceHost, updateVerificationSessionRequest, registrationServiceSession,
           verificationSession, userAgent, captchaScoreThreshold.getScoreThreshold());
+      // &end[Captcha]
     } catch (final RateLimitExceededException e) {
 
       final Response response = buildResponseForRateLimitExceeded(verificationSession, registrationServiceSession,
@@ -343,6 +345,7 @@ public class VerificationController {
     return verificationSession;
   }
 
+  // &begin[Captcha]
   /**
    * If a captcha value is present, it is assessed. If it is valid, then {@link VerificationSession.Information#CAPTCHA}
    * is removed from requested information, added to submitted information, and
@@ -407,6 +410,7 @@ public class VerificationController {
 
     return verificationSession;
   }
+  // &end[Captcha]
 
   @GET
   @Path("/session/{sessionId}")

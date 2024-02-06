@@ -97,12 +97,14 @@ public class ChallengeController {
         tags = tags.and(CHALLENGE_TYPE_TAG, "recaptcha");
 
         final String mostRecentProxy = HeaderUtils.getMostRecentProxy(forwardedFor).orElseThrow(() -> new BadRequestException());
+        // &begin[Recaptcha]
         boolean success = rateLimitChallengeManager.answerRecaptchaChallenge(
             auth.getAccount(),
             recaptchaChallengeRequest.getCaptcha(),
             mostRecentProxy,
             userAgent,
             captchaScoreThreshold.getScoreThreshold());
+        // &end[Recaptcha]
 
         if (!success) {
           return Response.status(428).build();

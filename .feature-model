@@ -12,4 +12,10 @@ SignalServer
     SecretRedaction
     SecretAccess
     SecretValidation
+  AntiBot
+    Captcha
+      HCaptcha
+      Recaptcha
+  Policies
+    CORS
 

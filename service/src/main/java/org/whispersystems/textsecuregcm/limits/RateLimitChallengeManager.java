@@ -66,6 +66,7 @@ public class RateLimitChallengeManager {
     }
   }
 
+  // &begin[Captcha]
   public boolean answerRecaptchaChallenge(final Account account, final String captcha, final String mostRecentProxyIp, final String userAgent, final Optional<Float> scoreThreshold)
       throws RateLimitExceededException, IOException {
 
@@ -87,6 +88,7 @@ public class RateLimitChallengeManager {
     }
     return challengeSuccess;
   }
+  // &end[Captcha]
 
   private void resetRateLimits(final Account account, final ChallengeType type) throws RateLimitExceededException {
     try {

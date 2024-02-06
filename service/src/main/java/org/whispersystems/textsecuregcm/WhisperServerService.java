@@ -590,7 +590,7 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
     HttpClient shortCodeRetrieverHttpClient = HttpClient.newBuilder().version(HttpClient.Version.HTTP_2)
         .connectTimeout(Duration.ofSeconds(10)).build();
     ShortCodeExpander shortCodeRetriever = new ShortCodeExpander(shortCodeRetrieverHttpClient, config.getShortCodeRetrieverConfiguration().baseUrl());
-    CaptchaChecker captchaChecker = new CaptchaChecker(shortCodeRetriever, List.of(recaptchaClient, hCaptchaClient));
+    CaptchaChecker captchaChecker = new CaptchaChecker(shortCodeRetriever, List.of(recaptchaClient, hCaptchaClient)); // &line[Captcha]
 
     PushChallengeManager pushChallengeManager = new PushChallengeManager(pushNotificationManager,
         pushChallengeDynamoDb);
@@ -900,6 +900,7 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
     });
   }
 
+  // &begin[CORS]
   private void registerCorsFilter(Environment environment) {
     FilterRegistration.Dynamic filter = environment.servlets().addFilter("CORS", CrossOriginFilter.class);
     filter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
@@ -909,6 +910,7 @@ public class WhisperServerService extends Application<WhisperServerConfiguration
     filter.setInitParameter("preflightMaxAge", "5184000");
     filter.setInitParameter("allowCredentials", "true");
   }
+  // &end[CORS]
 
   public static void main(String[] args) throws Exception {
     new WhisperServerService().run(args);

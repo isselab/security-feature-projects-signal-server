@@ -25,8 +25,11 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
+
+import org.gravity.security.annotations.requirements.Critical;
 import org.whispersystems.textsecuregcm.configuration.ApnConfiguration;
 
+@Critical(secrecy = "Secret.value():Object")
 public class APNSender implements Managed, PushNotificationSender {
 
   private final ExecutorService executor;

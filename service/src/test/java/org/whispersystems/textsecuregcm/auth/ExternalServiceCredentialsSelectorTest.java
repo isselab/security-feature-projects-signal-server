@@ -13,6 +13,8 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 import org.apache.commons.lang3.RandomUtils;
+import org.gravity.security.annotations.requirements.Critical;
+import org.gravity.security.annotations.requirements.Secrecy;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -20,6 +22,7 @@ import org.whispersystems.textsecuregcm.auth.ExternalServiceCredentialsSelector.
 import org.whispersystems.textsecuregcm.util.MockUtils;
 import org.whispersystems.textsecuregcm.util.MutableClock;
 
+@Critical(secrecy = "ExternalServiceCredentialsGenerator.generateForUuid(UUID):ExternalServiceCredentials")
 public class ExternalServiceCredentialsSelectorTest {
 
   private static final UUID UUID1 = UUID.randomUUID();

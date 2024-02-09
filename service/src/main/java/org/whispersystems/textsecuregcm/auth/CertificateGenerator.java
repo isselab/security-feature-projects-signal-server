@@ -10,6 +10,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import java.security.InvalidKeyException;
 import java.util.concurrent.TimeUnit;
 
+import org.gravity.security.annotations.requirements.Critical;
 import org.gravity.security.annotations.requirements.Integrity;
 import org.gravity.security.annotations.requirements.Secrecy;
 import org.signal.libsignal.protocol.ecc.Curve;
@@ -20,6 +21,7 @@ import org.whispersystems.textsecuregcm.identity.IdentityType;
 import org.whispersystems.textsecuregcm.storage.Account;
 import org.whispersystems.textsecuregcm.storage.Device;
 
+@Critical(secrecy = "CertificateGenerator.privateKey:ECPrivateKey")
 public class CertificateGenerator {
 
   @Secrecy

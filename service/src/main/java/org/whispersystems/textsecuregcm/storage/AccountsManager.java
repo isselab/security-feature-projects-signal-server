@@ -47,6 +47,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.gravity.security.annotations.requirements.Critical;
 import org.signal.libsignal.protocol.IdentityKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,6 +72,7 @@ import org.whispersystems.textsecuregcm.util.Util;
 import reactor.core.publisher.ParallelFlux;
 import reactor.core.scheduler.Scheduler;
 
+@Critical(secrecy = "AccountAttributes.recoveryPassword():Optional", integrity = {"RegistrationRecoveryPasswordsManager.storeForCurrentNumber(String,byte[]):CompletableFuture", "SecureValueRecovery2Client.deleteBackups(UUID):CompletableFuture", "SecureStorageClient.deleteStoredData(UUID):CompletableFuture"})
 public class AccountsManager {
 
   private static final MetricRegistry metricRegistry = SharedMetricRegistries.getOrCreate(Constants.METRICS_NAME);

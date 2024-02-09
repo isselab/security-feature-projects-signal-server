@@ -21,12 +21,15 @@ import java.util.Optional;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
+
+import org.gravity.security.annotations.requirements.Critical;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.whispersystems.textsecuregcm.entities.CurrencyConversionEntity;
 import org.whispersystems.textsecuregcm.entities.CurrencyConversionEntityList;
 import org.whispersystems.textsecuregcm.redis.FaultTolerantRedisCluster;
 
+@Critical(secrecy = "CoinMarketCapClient.getSpotPrice(String,String):BigDecimal")
 public class CurrencyConversionManager implements Managed {
 
   private static final Logger logger = LoggerFactory.getLogger(CurrencyConversionManager.class);

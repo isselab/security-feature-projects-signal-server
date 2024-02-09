@@ -5,6 +5,7 @@
 
 package org.whispersystems.textsecuregcm.attachments;
 
+import org.gravity.security.annotations.requirements.Critical;
 import org.gravity.security.annotations.requirements.Secrecy;
 import org.whispersystems.textsecuregcm.gcp.CanonicalRequest;
 import org.whispersystems.textsecuregcm.gcp.CanonicalRequestGenerator;
@@ -17,6 +18,7 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.Map;
 
+@Critical(secrecy = "GcsAttachmentGenerator.getSignedUploadLocation(CanonicalRequest):String")
 public class GcsAttachmentGenerator implements AttachmentGenerator {
   @Nonnull
   private final CanonicalRequestGenerator canonicalRequestGenerator;

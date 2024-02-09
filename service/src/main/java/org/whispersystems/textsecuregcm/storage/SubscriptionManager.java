@@ -24,6 +24,7 @@ import javax.annotation.Nullable;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.core.Response;
 
+import org.gravity.security.annotations.requirements.Critical;
 import org.gravity.security.annotations.requirements.Secrecy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +40,7 @@ import software.amazon.awssdk.services.dynamodb.model.QueryRequest;
 import software.amazon.awssdk.services.dynamodb.model.ReturnValue;
 import software.amazon.awssdk.services.dynamodb.model.UpdateItemRequest;
 
+@Critical(secrecy = "Record.password:byte[]")
 public class SubscriptionManager {
 
   private static final Logger logger = LoggerFactory.getLogger(SubscriptionManager.class);
@@ -59,6 +61,7 @@ public class SubscriptionManager {
 
   public static final String INDEX_NAME = "pc_to_u";  // Hash Key "PC"
 
+  @Critical(secrecy = "Record.password:byte[]")
   public static class Record {
 
     public final byte[] user;

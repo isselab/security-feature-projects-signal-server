@@ -27,6 +27,7 @@ import java.util.UUID;
 import java.util.concurrent.Executor;
 import java.util.stream.Stream;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.gravity.security.annotations.requirements.Critical;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -42,6 +43,7 @@ import org.whispersystems.textsecuregcm.storage.Device;
 import org.whispersystems.textsecuregcm.util.HeaderUtils;
 import org.whispersystems.textsecuregcm.util.Pair;
 
+@Critical(secrecy = "HeaderUtils.basicAuthHeader(String,String):String")
 class BasicCredentialAuthenticationInterceptorTest {
 
   private Server server;

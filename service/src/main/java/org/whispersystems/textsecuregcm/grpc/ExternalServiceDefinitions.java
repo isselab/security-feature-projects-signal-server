@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.tuple.Pair;
+import org.gravity.security.annotations.requirements.Critical;
 import org.signal.chat.credentials.ExternalServiceType;
 import org.whispersystems.textsecuregcm.WhisperServerConfiguration;
 import org.whispersystems.textsecuregcm.auth.ExternalServiceCredentialsGenerator;
@@ -21,6 +22,7 @@ import org.whispersystems.textsecuregcm.configuration.DirectoryV2ClientConfigura
 import org.whispersystems.textsecuregcm.configuration.PaymentsServiceConfiguration;
 import org.whispersystems.textsecuregcm.configuration.SecureValueRecovery2Configuration;
 
+@Critical(secrecy = "Secret.value():Object")
 enum ExternalServiceDefinitions {
   ART(ExternalServiceType.EXTERNAL_SERVICE_TYPE_ART, (chatConfig, clock) -> {
     final ArtServiceConfiguration cfg = chatConfig.getArtServiceConfiguration();

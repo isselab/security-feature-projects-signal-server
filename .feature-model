@@ -20,4 +20,6 @@ SignalServer
     SpamFilter
   Policies
     CORS
+   IntegrityProtection
+    MAC
 

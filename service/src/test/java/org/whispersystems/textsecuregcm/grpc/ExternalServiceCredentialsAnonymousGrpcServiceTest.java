@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import org.apache.commons.lang3.RandomUtils;
+import org.gravity.security.annotations.requirements.Critical;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -28,6 +29,7 @@ import org.whispersystems.textsecuregcm.storage.AccountsManager;
 import org.whispersystems.textsecuregcm.util.MockUtils;
 import org.whispersystems.textsecuregcm.util.MutableClock;
 
+@Critical(secrecy = "ExternalServiceCredentialsGenerator.generateForUuid(UUID):ExternalServiceCredentials")
 class ExternalServiceCredentialsAnonymousGrpcServiceTest extends
     SimpleBaseGrpcTest<ExternalServiceCredentialsAnonymousGrpcService, ExternalServiceCredentialsAnonymousGrpc.ExternalServiceCredentialsAnonymousBlockingStub> {
 

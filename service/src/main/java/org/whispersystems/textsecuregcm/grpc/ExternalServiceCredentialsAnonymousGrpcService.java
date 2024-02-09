@@ -12,6 +12,8 @@ import java.time.Clock;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+
+import org.gravity.security.annotations.requirements.Critical;
 import org.signal.chat.credentials.AuthCheckResult;
 import org.signal.chat.credentials.CheckSvrCredentialsRequest;
 import org.signal.chat.credentials.CheckSvrCredentialsResponse;
@@ -25,6 +27,7 @@ import org.whispersystems.textsecuregcm.storage.AccountsManager;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+@Critical(secrecy = "ExternalServiceCredentialsGenerator.generateForUuid(UUID):ExternalServiceCredentials")
 public class ExternalServiceCredentialsAnonymousGrpcService extends
     ReactorExternalServiceCredentialsAnonymousGrpc.ExternalServiceCredentialsAnonymousImplBase {
 

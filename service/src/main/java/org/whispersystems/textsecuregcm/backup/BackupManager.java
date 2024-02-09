@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
+import org.gravity.security.annotations.requirements.Critical;
 import org.gravity.security.annotations.requirements.Secrecy;
 import org.signal.libsignal.protocol.InvalidKeyException;
 import org.signal.libsignal.protocol.ecc.ECPublicKey;
@@ -41,6 +42,7 @@ import software.amazon.awssdk.services.dynamodb.model.ConditionalCheckFailedExce
 import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.UpdateItemRequest;
 
+@Critical(secrecy = "BackupManager.serverSecretParams:GenericServerSecretParams")
 public class BackupManager {
 
   private static final Logger logger = LoggerFactory.getLogger(BackupManager.class);

@@ -6,6 +6,7 @@
 package org.whispersystems.textsecuregcm.attachments;
 
 import org.apache.http.HttpHeaders;
+import org.gravity.security.annotations.requirements.Critical;
 import org.whispersystems.textsecuregcm.auth.ExternalServiceCredentials;
 import org.whispersystems.textsecuregcm.auth.ExternalServiceCredentialsGenerator;
 import org.whispersystems.textsecuregcm.util.HeaderUtils;
@@ -14,6 +15,7 @@ import java.time.Clock;
 import java.util.Base64;
 import java.util.Map;
 
+@Critical(secrecy = {"HeaderUtils.basicAuthHeader(ExternalServiceCredentials):String", "ExternalServiceCredentialsGenerator.generateFor(String):ExternalServiceCredentials"})
 public class TusAttachmentGenerator implements AttachmentGenerator {
 
   private static final String ATTACHMENTS = "attachments";

@@ -29,6 +29,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
+
+import org.gravity.security.annotations.requirements.Critical;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -79,6 +81,7 @@ import org.whispersystems.textsecuregcm.util.UUIDUtil;
 import org.whispersystems.textsecuregcm.util.UsernameHashZkProofVerifier;
 import reactor.core.publisher.Mono;
 
+@Critical(integrity = "RegistrationRecoveryPasswordsManager.storeForCurrentNumber(String,byte[]):CompletableFuture")
 class AccountsGrpcServiceTest extends SimpleBaseGrpcTest<AccountsGrpcService, AccountsGrpc.AccountsBlockingStub> {
 
   @Mock

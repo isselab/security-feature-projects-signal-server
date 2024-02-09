@@ -18,9 +18,11 @@ import java.util.UUID;
 import java.util.function.Function;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
+import org.gravity.security.annotations.requirements.Critical;
 import org.gravity.security.annotations.requirements.Secrecy;
 import org.whispersystems.textsecuregcm.configuration.secrets.SecretBytes;
 
+@Critical(secrecy = {"Secret.value():Object", "Builder.userDerivationKey:byte[]", "Builder.key:byte[]", "ExternalServiceCredentialsGenerator.generate(String):ExternalServiceCredentials", "ExternalServiceCredentialsGenerator.userDerivationKey:byte[]", "ExternalServiceCredentialsGenerator.key:byte[]", "ExternalServiceCredentialsGenerator.generateFor(String):ExternalServiceCredentials"})
 public class ExternalServiceCredentialsGenerator {
 
   private static final String DELIMITER = ":";
@@ -232,6 +234,7 @@ public class ExternalServiceCredentialsGenerator {
     return clock.instant().getEpochSecond();
   }
 
+  @Critical(secrecy = "Secret.value():Object")
   public static class Builder {
 
 	@Secrecy

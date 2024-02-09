@@ -19,6 +19,7 @@ import javax.annotation.Nullable;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import org.apache.commons.lang3.StringUtils;
+import org.gravity.security.annotations.requirements.Critical;
 import org.whispersystems.textsecuregcm.controllers.RateLimitExceededException;
 import org.whispersystems.textsecuregcm.entities.PhoneVerificationRequest;
 import org.whispersystems.textsecuregcm.entities.RegistrationLockFailure;
@@ -32,6 +33,7 @@ import org.whispersystems.textsecuregcm.storage.AccountsManager;
 import org.whispersystems.textsecuregcm.storage.Device;
 import org.whispersystems.textsecuregcm.storage.RegistrationRecoveryPasswordsManager;
 
+@Critical(secrecy = "ExternalServiceCredentialsGenerator.generateForUuid(UUID):ExternalServiceCredentials")
 public class RegistrationLockVerificationManager {
   public enum Flow {
     REGISTRATION,

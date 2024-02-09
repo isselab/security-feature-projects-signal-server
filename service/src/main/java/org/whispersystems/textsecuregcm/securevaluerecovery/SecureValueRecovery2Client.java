@@ -19,6 +19,9 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ScheduledExecutorService;
+
+import org.gravity.security.annotations.requirements.Critical;
+import org.gravity.security.annotations.requirements.Integrity;
 import org.whispersystems.textsecuregcm.auth.ExternalServiceCredentials;
 import org.whispersystems.textsecuregcm.auth.ExternalServiceCredentialsGenerator;
 import org.whispersystems.textsecuregcm.configuration.SecureValueRecovery2Configuration;
@@ -28,6 +31,7 @@ import org.whispersystems.textsecuregcm.util.HttpUtils;
 /**
  * A client for sending requests to Signal's secure value recovery v2 service on behalf of authenticated users.
  */
+@Critical(secrecy = {"ExternalServiceCredentialsGenerator.generateForUuid(UUID):ExternalServiceCredentials", "HeaderUtils.basicAuthHeader(ExternalServiceCredentials):String"})
 public class SecureValueRecovery2Client {
 
   private final ExternalServiceCredentialsGenerator secureValueRecoveryCredentialsGenerator;
@@ -57,6 +61,7 @@ public class SecureValueRecovery2Client {
         .build();
   }
 
+  @Integrity
   public CompletableFuture<Void> deleteBackups(final UUID accountUuid) {
 
     final ExternalServiceCredentials credentials = secureValueRecoveryCredentialsGenerator.generateForUuid(accountUuid);

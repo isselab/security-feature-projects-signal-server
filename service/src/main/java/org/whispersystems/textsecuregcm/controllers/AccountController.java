@@ -71,7 +71,7 @@ import org.whispersystems.textsecuregcm.util.HeaderUtils;
 import org.whispersystems.textsecuregcm.util.UsernameHashZkProofVerifier;
 import org.whispersystems.textsecuregcm.util.Util;
 
-@Critical(secrecy = {"TurnTokenGenerator.generate(UUID):TurnToken", "AccountAttributes.recoveryPassword():Optional", "AccountController.registrationRecoveryPasswordsManager:RegistrationRecoveryPasswordsManager"})
+@Critical(secrecy = {"TurnTokenGenerator.generate(UUID):TurnToken", "AccountAttributes.recoveryPassword():Optional", "AccountController.registrationRecoveryPasswordsManager:RegistrationRecoveryPasswordsManager"}, integrity={"RegistrationRecoveryPasswordsManager.storeForCurrentNumber(String,byte[]):CompletableFuture","AccountController.registrationRecoveryPasswordsManager:RegistrationRecoveryPasswordsManager"})
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 @Path("/v1/accounts")
 @io.swagger.v3.oas.annotations.tags.Tag(name = "Account")

@@ -30,6 +30,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.gravity.security.annotations.requirements.Critical;
 import org.gravity.security.annotations.requirements.Secrecy;
 import org.signal.libsignal.protocol.ServiceId;
 import org.signal.libsignal.zkgroup.GenericServerSecretParams;
@@ -45,6 +46,7 @@ import org.whispersystems.textsecuregcm.identity.IdentityType;
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 @Path("/v1/certificate")
 @Tag(name = "Certificate")
+@Critical(secrecy = "CertificateController.genericServerSecretParams:GenericServerSecretParams")
 public class CertificateController {
 
   private final CertificateGenerator certificateGenerator;
@@ -90,6 +92,7 @@ public class CertificateController {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/auth/group")
+  @Secrecy
   public GroupCredentials getGroupAuthenticationCredentials(
       @Auth AuthenticatedAccount auth, // &line[AccountAuthenticator]
       @QueryParam("redemptionStartSeconds") int startSeconds,

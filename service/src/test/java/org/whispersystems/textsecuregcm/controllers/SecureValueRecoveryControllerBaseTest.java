@@ -17,6 +17,8 @@ import java.util.concurrent.TimeUnit;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.gravity.security.annotations.requirements.Critical;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -28,6 +30,7 @@ import org.whispersystems.textsecuregcm.storage.Account;
 import org.whispersystems.textsecuregcm.storage.AccountsManager;
 import org.whispersystems.textsecuregcm.util.MutableClock;
 
+@Critical(secrecy = {"ExternalServiceCredentialsGenerator.generateForUuid(UUID):ExternalServiceCredentials"})
 abstract class SecureValueRecoveryControllerBaseTest {
 
   private static final UUID USER_1 = UUID.randomUUID();

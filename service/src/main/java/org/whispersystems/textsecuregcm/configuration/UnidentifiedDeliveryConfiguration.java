@@ -7,6 +7,7 @@ package org.whispersystems.textsecuregcm.configuration;
 
 import javax.validation.constraints.NotNull;
 
+import org.gravity.security.annotations.requirements.Critical;
 import org.gravity.security.annotations.requirements.Secrecy;
 import org.signal.libsignal.protocol.InvalidKeyException;
 import org.signal.libsignal.protocol.ecc.Curve;
@@ -14,7 +15,7 @@ import org.signal.libsignal.protocol.ecc.ECPrivateKey;
 import org.whispersystems.textsecuregcm.configuration.secrets.SecretBytes;
 import org.whispersystems.textsecuregcm.util.ExactlySize;
 
-
+@Critical(secrecy = "Secret.value():Object")
 public record UnidentifiedDeliveryConfiguration(@Secrecy @NotNull SecretBytes certificate,
                                                 @Secrecy @ExactlySize(32) SecretBytes privateKey,
                                                 int expiresDays) {

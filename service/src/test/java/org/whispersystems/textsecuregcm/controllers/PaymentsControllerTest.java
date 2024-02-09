@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Optional;
 import javax.ws.rs.core.Response;
 import org.glassfish.jersey.test.grizzly.GrizzlyWebTestContainerFactory;
+import org.gravity.security.annotations.requirements.Critical;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,6 +34,7 @@ import org.whispersystems.textsecuregcm.entities.CurrencyConversionEntityList;
 import org.whispersystems.textsecuregcm.tests.util.AuthHelper;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
+@Critical(secrecy = "ExternalServiceCredentialsGenerator.generateForUuid(UUID):ExternalServiceCredentials")
 class PaymentsControllerTest {
 
   private static final ExternalServiceCredentialsGenerator paymentsCredentialsGenerator = mock(ExternalServiceCredentialsGenerator.class);

@@ -35,7 +35,7 @@ import org.whispersystems.textsecuregcm.configuration.secrets.SecretString;
 import org.whispersystems.textsecuregcm.util.HostnameUtil;
 
 @JsonTypeName("logstashtcpsocket")
-@Critical(secrecy = "Secret.value:T")
+@Critical(secrecy = {"Secret.value():Object", "LogstashTcpSocketAppenderFactory.apiKey:SecretString"})
 public class LogstashTcpSocketAppenderFactory extends AbstractAppenderFactory<ILoggingEvent> {
 
   @JsonProperty

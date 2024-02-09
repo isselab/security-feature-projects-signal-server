@@ -25,6 +25,8 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
+
+import org.gravity.security.annotations.requirements.Critical;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.signal.libsignal.protocol.IdentityKey;
@@ -40,6 +42,7 @@ import org.whispersystems.textsecuregcm.storage.AccountsManager;
 import org.whispersystems.textsecuregcm.storage.Device;
 import org.whispersystems.textsecuregcm.util.HeaderUtils;
 
+@Critical(secrecy = "HeaderUtils.basicAuthHeader(String,String):String")
 public class AuthHelper {
   // Static seed to ensure reproducible tests.
   private static final Random random = new Random(0xf744df3b43a3339cL);

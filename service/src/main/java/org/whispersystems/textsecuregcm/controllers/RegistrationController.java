@@ -33,6 +33,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.gravity.security.annotations.requirements.Critical;
 import org.whispersystems.textsecuregcm.auth.BasicAuthorizationHeader;
 import org.whispersystems.textsecuregcm.auth.PhoneVerificationTokenManager;
 import org.whispersystems.textsecuregcm.auth.RegistrationLockVerificationManager;
@@ -52,6 +54,7 @@ import org.whispersystems.textsecuregcm.util.Util;
 
 @Path("/v1/registration")
 @io.swagger.v3.oas.annotations.tags.Tag(name = "Registration")
+@Critical(secrecy = "BasicAuthorizationHeader.getPassword():String")
 public class RegistrationController {
 
   private static final DistributionSummary REREGISTRATION_IDLE_DAYS_DISTRIBUTION = DistributionSummary

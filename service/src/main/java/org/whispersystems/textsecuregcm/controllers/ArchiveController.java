@@ -37,6 +37,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+
+import org.gravity.security.annotations.requirements.Critical;
+import org.gravity.security.annotations.requirements.Secrecy;
 import org.signal.libsignal.protocol.ecc.ECPublicKey;
 import org.signal.libsignal.zkgroup.InvalidInputException;
 import org.signal.libsignal.zkgroup.backups.BackupAuthCredentialPresentation;
@@ -49,6 +52,7 @@ import org.whispersystems.textsecuregcm.util.ECPublicKeyAdapter;
 
 @Path("/v1/archives")
 @Tag(name = "Archive")
+@Critical(secrecy = "BackupAuthManager.getBackupAuthCredentials(Account,Instant,Instant):CompletableFuture")
 public class ArchiveController {
 
   public final static String X_SIGNAL_ZK_AUTH = "X-Signal-ZK-Auth";
@@ -120,6 +124,7 @@ public class ArchiveController {
   @ApiResponse(responseCode = "400", description = "The start/end did not meet alignment/duration requirements")
   @ApiResponse(responseCode = "404", description = "Could not find an existing blinded backup id")
   @ApiResponse(responseCode = "429", description = "Rate limited.")
+  @Secrecy
   public CompletionStage<BackupAuthCredentialsResponse> getBackupZKCredentials(
       @Auth AuthenticatedAccount auth, // &line[AccountAuthenticator]
       @NotNull @QueryParam("redemptionStartSeconds") Integer startSeconds,

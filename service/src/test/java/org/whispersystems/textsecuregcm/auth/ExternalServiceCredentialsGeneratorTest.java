@@ -15,11 +15,14 @@ import static org.whispersystems.textsecuregcm.util.HmacUtils.hmac256TruncatedTo
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.concurrent.TimeUnit;
+
+import org.gravity.security.annotations.requirements.Critical;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.whispersystems.textsecuregcm.util.MockUtils;
 import org.whispersystems.textsecuregcm.util.MutableClock;
 
+@Critical(secrecy = {"ExternalServiceCredentialsGenerator.generateWithTimestampAsUsername():ExternalServiceCredentials", "ExternalServiceCredentialsGenerator.generateFor(String):ExternalServiceCredentials"})
 class ExternalServiceCredentialsGeneratorTest {
   private static final String PREFIX = "prefix";
 

@@ -22,6 +22,9 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+import org.gravity.security.annotations.requirements.Critical;
+import org.gravity.security.annotations.requirements.Secrecy;
 import org.jetbrains.annotations.TestOnly;
 import org.whispersystems.textsecuregcm.auth.AuthenticatedAccount;
 import org.whispersystems.textsecuregcm.auth.ExternalServiceCredentials;
@@ -37,6 +40,7 @@ import org.whispersystems.textsecuregcm.storage.AccountsManager;
 
 @Path("/v2/backup")
 @Tag(name = "Secure Value Recovery")
+@Critical(secrecy = {"ExternalServiceCredentialsGenerator.generateFor(String):ExternalServiceCredentials", "Secret.value():Object"})
 public class SecureValueRecovery2Controller {
 
   private static final long MAX_AGE_SECONDS = TimeUnit.DAYS.toSeconds(30);
@@ -77,6 +81,7 @@ public class SecureValueRecovery2Controller {
   )
   @ApiResponse(responseCode = "200", description = "`JSON` with generated credentials.", useReturnTypeSchema = true)
   @ApiResponse(responseCode = "401", description = "Account authentication check failed.")
+  @Secrecy
   public ExternalServiceCredentials getAuth(@Auth final AuthenticatedAccount auth) { // &line[AccountAuthenticator]
     return backupServiceCredentialGenerator.generateFor(auth.getAccount().getUuid().toString());
   }

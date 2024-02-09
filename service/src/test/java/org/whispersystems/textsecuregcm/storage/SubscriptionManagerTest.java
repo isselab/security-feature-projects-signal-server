@@ -21,6 +21,7 @@ import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import javax.ws.rs.ClientErrorException;
 import org.assertj.core.api.Condition;
+import org.gravity.security.annotations.requirements.Critical;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -30,6 +31,7 @@ import org.whispersystems.textsecuregcm.subscriptions.ProcessorCustomer;
 import org.whispersystems.textsecuregcm.subscriptions.SubscriptionProcessor;
 import org.whispersystems.textsecuregcm.storage.DynamoDbExtensionSchema.Tables;
 
+@Critical(secrecy = "")
 class SubscriptionManagerTest {
 
   private static final long NOW_EPOCH_SECONDS = 1_500_000_000L;

@@ -11,6 +11,8 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+import org.gravity.security.annotations.requirements.Critical;
 import org.whispersystems.textsecuregcm.auth.AuthenticatedAccount;
 import org.whispersystems.textsecuregcm.auth.ExternalServiceCredentials;
 import org.whispersystems.textsecuregcm.auth.ExternalServiceCredentialsGenerator;
@@ -20,6 +22,7 @@ import org.whispersystems.textsecuregcm.entities.CurrencyConversionEntityList;
 
 @Path("/v1/payments")
 @Tag(name = "Payments")
+@Critical(secrecy = "ExternalServiceCredentialsGenerator.generateForUuid(UUID):ExternalServiceCredentials")
 public class PaymentsController {
 
   private final ExternalServiceCredentialsGenerator paymentsServiceCredentialsGenerator;

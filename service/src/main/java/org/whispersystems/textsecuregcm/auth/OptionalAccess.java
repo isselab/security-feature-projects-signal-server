@@ -5,6 +5,7 @@
 
 package org.whispersystems.textsecuregcm.auth;
 
+import org.gravity.security.annotations.requirements.Critical;
 import org.whispersystems.textsecuregcm.storage.Account;
 import org.whispersystems.textsecuregcm.storage.Device;
 
@@ -16,6 +17,7 @@ import java.security.MessageDigest;
 import java.util.Optional;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+@Critical(secrecy = "Anonymous.getAccessKey():byte[]")
 public class OptionalAccess {
 
   public static final String UNIDENTIFIED = "Unidentified-Access-Key";

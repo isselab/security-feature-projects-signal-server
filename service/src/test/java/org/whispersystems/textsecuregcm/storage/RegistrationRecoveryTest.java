@@ -16,6 +16,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+
+import org.gravity.security.annotations.requirements.Critical;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -27,6 +29,7 @@ import org.whispersystems.textsecuregcm.util.MutableClock;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
 
+@Critical(integrity = "RegistrationRecoveryPasswordsManager.storeForCurrentNumber(String,byte[]):CompletableFuture")
 public class RegistrationRecoveryTest {
 
   private static final MutableClock CLOCK = MockUtils.mutableClock(0);

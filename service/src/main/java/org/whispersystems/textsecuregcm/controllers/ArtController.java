@@ -12,6 +12,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+import org.gravity.security.annotations.requirements.Critical;
+import org.gravity.security.annotations.requirements.Secrecy;
 import org.whispersystems.textsecuregcm.auth.AuthenticatedAccount;
 import org.whispersystems.textsecuregcm.auth.ExternalServiceCredentials;
 import org.whispersystems.textsecuregcm.auth.ExternalServiceCredentialsGenerator;
@@ -20,6 +23,7 @@ import org.whispersystems.textsecuregcm.limits.RateLimiters;
 
 @Path("/v1/art")
 @Tag(name = "Art")
+@Critical(secrecy = "ExternalServiceCredentialsGenerator.generateForUuid(UUID):ExternalServiceCredentials")
 public class ArtController {
   private final ExternalServiceCredentialsGenerator artServiceCredentialsGenerator;
   private final RateLimiters rateLimiters;
@@ -42,6 +46,7 @@ public class ArtController {
   @GET
   @Path("/auth")
   @Produces(MediaType.APPLICATION_JSON)
+  @Secrecy
   public ExternalServiceCredentials getAuth(final @Auth AuthenticatedAccount auth) // &line[AccountAuthenticator]
     throws RateLimitExceededException {
     final UUID uuid = auth.getAccount().getUuid();

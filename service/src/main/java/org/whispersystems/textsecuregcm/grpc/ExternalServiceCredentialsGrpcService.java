@@ -11,6 +11,9 @@ import com.google.common.annotations.VisibleForTesting;
 import io.grpc.Status;
 import java.time.Clock;
 import java.util.Map;
+
+import org.gravity.security.annotations.requirements.Critical;
+import org.gravity.security.annotations.requirements.Secrecy;
 import org.signal.chat.credentials.ExternalServiceType;
 import org.signal.chat.credentials.GetExternalServiceCredentialsRequest;
 import org.signal.chat.credentials.GetExternalServiceCredentialsResponse;
@@ -23,6 +26,7 @@ import org.whispersystems.textsecuregcm.auth.grpc.AuthenticationUtil;
 import org.whispersystems.textsecuregcm.limits.RateLimiters;
 import reactor.core.publisher.Mono;
 
+@Critical(secrecy = "ExternalServiceCredentialsGenerator.generateForUuid(UUID):ExternalServiceCredentials")
 public class ExternalServiceCredentialsGrpcService extends ReactorExternalServiceCredentialsGrpc.ExternalServiceCredentialsImplBase {
 
   private final Map<ExternalServiceType, ExternalServiceCredentialsGenerator> credentialsGeneratorByType;
@@ -48,6 +52,7 @@ public class ExternalServiceCredentialsGrpcService extends ReactorExternalServic
   }
 
   @Override
+  @Secrecy
   public Mono<GetExternalServiceCredentialsResponse> getExternalServiceCredentials(final GetExternalServiceCredentialsRequest request) {
     final ExternalServiceCredentialsGenerator credentialsGenerator = this.credentialsGeneratorByType
         .get(request.getExternalService());

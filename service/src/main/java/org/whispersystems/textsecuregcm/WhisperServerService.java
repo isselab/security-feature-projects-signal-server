@@ -51,6 +51,7 @@ import javax.servlet.FilterRegistration;
 import javax.servlet.ServletRegistration;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.glassfish.jersey.server.ServerProperties;
+import org.gravity.security.annotations.requirements.Critical;
 import org.signal.event.AdminEventLogger;
 import org.signal.event.GoogleCloudAdminEventLogger;
 import org.signal.i18n.HeaderControlledResourceBundleLookup;
@@ -245,6 +246,7 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.S3Client;
 
+@Critical(secrecy = {"Secret.value():Object"})
 public class WhisperServerService extends Application<WhisperServerConfiguration> {
 
   private static final Logger log = LoggerFactory.getLogger(WhisperServerService.class);

@@ -45,6 +45,7 @@ import javax.ws.rs.core.Response;
 import org.apache.commons.lang3.RandomUtils;
 import org.glassfish.jersey.server.ServerProperties;
 import org.glassfish.jersey.test.grizzly.GrizzlyWebTestContainerFactory;
+import org.gravity.security.annotations.requirements.Critical;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -93,6 +94,7 @@ import org.whispersystems.textsecuregcm.util.SystemMapper;
 import org.whispersystems.textsecuregcm.util.UsernameHashZkProofVerifier;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
+@Critical(integrity = "RegistrationRecoveryPasswordsManager.storeForCurrentNumber(String,byte[]):CompletableFuture")
 class AccountControllerTest {
   private static final String SENDER             = "+14152222222";
   private static final String SENDER_OLD         = "+14151111111";

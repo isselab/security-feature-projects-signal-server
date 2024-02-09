@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.HexFormat;
 import java.util.List;
 import java.util.UUID;
+
+import org.gravity.security.annotations.requirements.Critical;
+import org.gravity.security.annotations.requirements.Integrity;
 import org.signal.chat.account.ClearRegistrationLockRequest;
 import org.signal.chat.account.ClearRegistrationLockResponse;
 import org.signal.chat.account.ConfigureUnidentifiedAccessRequest;
@@ -57,6 +60,7 @@ import org.whispersystems.textsecuregcm.util.UUIDUtil;
 import org.whispersystems.textsecuregcm.util.UsernameHashZkProofVerifier;
 import reactor.core.publisher.Mono;
 
+@Critical(integrity = "RegistrationRecoveryPasswordsManager.storeForCurrentNumber(String,byte[]):CompletableFuture")
 public class AccountsGrpcService extends ReactorAccountsGrpc.AccountsImplBase {
 
   private final AccountsManager accountsManager;
@@ -319,6 +323,7 @@ public class AccountsGrpcService extends ReactorAccountsGrpc.AccountsImplBase {
         .thenReturn(SetDiscoverableByPhoneNumberResponse.newBuilder().build());
   }
 
+  @Integrity
   @Override
   public Mono<SetRegistrationRecoveryPasswordResponse> setRegistrationRecoveryPassword(final SetRegistrationRecoveryPasswordRequest request) {
     final AuthenticatedDevice authenticatedDevice = AuthenticationUtil.requireAuthenticatedDevice();

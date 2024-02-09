@@ -14,8 +14,11 @@ import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.StringUtils;
+import org.gravity.security.annotations.requirements.Critical;
+import org.gravity.security.annotations.requirements.Secrecy;
 import org.whispersystems.textsecuregcm.auth.ExternalServiceCredentials;
 
+@Critical(secrecy = {"ExternalServiceCredentials.password:String", "HeaderUtils.basicAuthHeader(String,String):String"})
 public final class HeaderUtils {
 
   public static final String X_SIGNAL_AGENT = "X-Signal-Agent";
@@ -28,10 +31,12 @@ public final class HeaderUtils {
     // utility class
   }
 
+  @Secrecy
   public static String basicAuthHeader(final ExternalServiceCredentials credentials) {
     return basicAuthHeader(credentials.username(), credentials.password());
   }
 
+  @Secrecy
   public static String basicAuthHeader(final String username, final String password) {
     requireNonNull(username);
     requireNonNull(password);

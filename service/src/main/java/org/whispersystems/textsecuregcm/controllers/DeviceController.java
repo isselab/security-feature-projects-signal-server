@@ -45,6 +45,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.glassfish.jersey.server.ContainerRequest;
+import org.gravity.security.annotations.requirements.Critical;
 import org.gravity.security.annotations.requirements.Integrity;
 import org.gravity.security.annotations.requirements.Secrecy;
 import org.whispersystems.textsecuregcm.auth.AuthEnablementRefreshRequirementProvider;
@@ -74,6 +75,7 @@ import org.whispersystems.textsecuregcm.util.VerificationCode;
 
 @Path("/v1/devices")
 @Tag(name = "Devices")
+@Critical(secrecy = {"DeviceController.verificationTokenKey:Key", "BasicAuthorizationHeader.getPassword():String"}, integrity = {"DeviceController.createDevice(String,String,AccountAttributes,ContainerRequest,Optional):Pair", "DeviceController.verificationTokenKey:Key", "DeviceController.VERIFICATION_TOKEN_ALGORITHM:String"})
 public class DeviceController {
 
   static final int MAX_DEVICES = 6;
@@ -90,6 +92,7 @@ public class DeviceController {
 
   private final Clock clock;
 
+  @Integrity
   private static final String VERIFICATION_TOKEN_ALGORITHM = "HmacSHA256";
 
   @VisibleForTesting
@@ -264,6 +267,7 @@ public class DeviceController {
     accounts.updateDevice(auth.getAccount(), deviceId, d -> d.setCapabilities(capabilities));
   }
 
+  // &begin[MAC]
   private Mac getInitializedMac() {
     try {
       final Mac mac = Mac.getInstance(VERIFICATION_TOKEN_ALGORITHM);
@@ -276,6 +280,7 @@ public class DeviceController {
       throw new AssertionError(e);
     }
   }
+  // &end[MAC]
 
   @VisibleForTesting
   String generateVerificationToken(final UUID aci) {
@@ -348,6 +353,7 @@ public class DeviceController {
     return account.isPniSupported() && !capabilities.pni();
   }
 
+  @Integrity
   private Pair<Account, Device> createDevice(final String password,
                                      final String verificationCode,
                                      final AccountAttributes accountAttributes,

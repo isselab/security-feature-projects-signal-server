@@ -25,6 +25,8 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import javax.ws.rs.WebApplicationException;
+
+import org.gravity.security.annotations.requirements.Critical;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -43,6 +45,7 @@ import org.whispersystems.textsecuregcm.storage.RegistrationRecoveryPasswordsMan
 import org.whispersystems.textsecuregcm.tests.util.AccountsHelper;
 import org.whispersystems.textsecuregcm.util.Pair;
 
+@Critical(secrecy = "ExternalServiceCredentialsGenerator.generateForUuid(UUID):ExternalServiceCredentials")
 class RegistrationLockVerificationManagerTest {
 
   private final AccountsManager accountsManager = mock(AccountsManager.class);

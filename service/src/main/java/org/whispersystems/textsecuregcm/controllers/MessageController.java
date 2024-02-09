@@ -62,6 +62,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import org.apache.commons.lang3.StringUtils;
+import org.gravity.security.annotations.requirements.Critical;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.whispersystems.textsecuregcm.auth.Anonymous;
@@ -115,6 +116,7 @@ import reactor.core.scheduler.Scheduler;
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 @Path("/v1/messages")
 @io.swagger.v3.oas.annotations.tags.Tag(name = "Messages")
+@Critical(secrecy = "CombinedUnidentifiedSenderAccessKeys.getAccessKeys():byte[]")
 public class MessageController {
 
   private static final Logger logger = LoggerFactory.getLogger(MessageController.class);

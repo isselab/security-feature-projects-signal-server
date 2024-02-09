@@ -6,6 +6,7 @@
 package org.whispersystems.textsecuregcm.backup;
 
 import org.apache.http.HttpHeaders;
+import org.gravity.security.annotations.requirements.Critical;
 import org.whispersystems.textsecuregcm.attachments.TusConfiguration;
 import org.whispersystems.textsecuregcm.auth.ExternalServiceCredentials;
 import org.whispersystems.textsecuregcm.auth.ExternalServiceCredentialsGenerator;
@@ -16,6 +17,7 @@ import java.time.Clock;
 import java.util.Base64;
 import java.util.Map;
 
+@Critical(secrecy = {"HeaderUtils.basicAuthHeader(ExternalServiceCredentials):String", "ExternalServiceCredentialsGenerator.generateFor(String):ExternalServiceCredentials"})
 public class TusBackupCredentialGenerator {
 
   private static final int BACKUP_CDN = 3;

@@ -14,6 +14,8 @@ import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.UUID;
+
+import org.gravity.security.annotations.requirements.Critical;
 import org.junit.jupiter.api.Test;
 import org.whispersystems.textsecuregcm.auth.AuthenticatedAccount;
 import org.whispersystems.textsecuregcm.auth.ExternalServiceCredentials;
@@ -23,6 +25,7 @@ import org.whispersystems.textsecuregcm.storage.Account;
 import org.whispersystems.textsecuregcm.storage.Device;
 import org.whispersystems.textsecuregcm.util.Pair;
 
+@Critical(secrecy = "DirectoryV2Controller.getAuthToken(AuthenticatedAccount):Response")
 class DirectoryControllerV2Test {
 
   @Test

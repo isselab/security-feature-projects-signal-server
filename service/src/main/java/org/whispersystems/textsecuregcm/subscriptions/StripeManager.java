@@ -71,6 +71,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import org.apache.commons.lang3.StringUtils;
+import org.gravity.security.annotations.requirements.Secrecy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.whispersystems.textsecuregcm.util.Conversions;
@@ -79,7 +80,7 @@ public class StripeManager implements SubscriptionProcessorManager {
   private static final Logger logger = LoggerFactory.getLogger(StripeManager.class);
   private static final String METADATA_KEY_LEVEL = "level";
 
-  private final StripeClient stripeClient;
+  private final StripeClient stripeClient; // Security: Sink for apiKey
   private final Executor executor;
   private final byte[] idempotencyKeyGenerator;
   private final String boostDescription;

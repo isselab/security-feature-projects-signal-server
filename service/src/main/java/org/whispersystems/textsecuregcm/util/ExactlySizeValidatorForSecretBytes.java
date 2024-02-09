@@ -5,8 +5,10 @@
 
 package org.whispersystems.textsecuregcm.util;
 
+import org.gravity.security.annotations.requirements.Critical;
 import org.whispersystems.textsecuregcm.configuration.secrets.SecretBytes;
 
+@Critical(secrecy = "Secret.value():Object")
 public class ExactlySizeValidatorForSecretBytes extends ExactlySizeValidator<SecretBytes> {
   @Override
   // TODO: is the size of a secret also a secret? e.g. knowing the length of a password might allow for better password cracking capabilities...

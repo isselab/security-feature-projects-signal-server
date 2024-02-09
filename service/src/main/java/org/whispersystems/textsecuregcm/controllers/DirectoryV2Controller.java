@@ -14,6 +14,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.gravity.security.annotations.requirements.Critical;
+import org.gravity.security.annotations.requirements.Secrecy;
 import org.whispersystems.textsecuregcm.auth.AuthenticatedAccount;
 import org.whispersystems.textsecuregcm.auth.ExternalServiceCredentials;
 import org.whispersystems.textsecuregcm.auth.ExternalServiceCredentialsGenerator;
@@ -21,6 +24,7 @@ import org.whispersystems.textsecuregcm.configuration.DirectoryV2ClientConfigura
 
 @Path("/v2/directory")
 @Tag(name = "Directory")
+@Critical(secrecy = "ExternalServiceCredentialsGenerator.generateForUuid(UUID):ExternalServiceCredentials")
 public class DirectoryV2Controller {
 
   private final ExternalServiceCredentialsGenerator directoryServiceTokenGenerator;
@@ -44,6 +48,7 @@ public class DirectoryV2Controller {
     this.directoryServiceTokenGenerator = userTokenGenerator;
   }
 
+  @Secrecy
   @GET
   @Path("/auth")
   @Produces(MediaType.APPLICATION_JSON)

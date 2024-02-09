@@ -11,6 +11,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+import org.gravity.security.annotations.requirements.Critical;
+import org.gravity.security.annotations.requirements.Secrecy;
 import org.whispersystems.textsecuregcm.auth.AuthenticatedAccount;
 import org.whispersystems.textsecuregcm.auth.ExternalServiceCredentials;
 import org.whispersystems.textsecuregcm.auth.ExternalServiceCredentialsGenerator;
@@ -18,6 +21,7 @@ import org.whispersystems.textsecuregcm.configuration.SecureStorageServiceConfig
 
 @Path("/v1/storage")
 @Tag(name = "Secure Storage")
+@Critical(secrecy = "ExternalServiceCredentialsGenerator.generateForUuid(UUID):ExternalServiceCredentials")
 public class SecureStorageController {
 
   private final ExternalServiceCredentialsGenerator storageServiceCredentialsGenerator;
@@ -36,6 +40,7 @@ public class SecureStorageController {
   @GET
   @Path("/auth")
   @Produces(MediaType.APPLICATION_JSON)
+  @Secrecy
   public ExternalServiceCredentials getAuth(@Auth AuthenticatedAccount auth) { // &line[AccountAuthenticator]
     return storageServiceCredentialsGenerator.generateForUuid(auth.getAccount().getUuid());
   }
